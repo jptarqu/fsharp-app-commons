@@ -1,0 +1,47 @@
+source https://api.nuget.org/v3/index.json
+framework >= net461
+
+
+nuget FAKE
+nuget Humanizer 2.1.0
+nuget Humanizer.Core 2.1.0
+nuget Humanizer.Core.af 2.1.0
+nuget Humanizer.Core.ar 2.1.0
+nuget Humanizer.Core.bg 2.1.0
+nuget Humanizer.Core.bn-BD 2.1.0
+nuget Humanizer.Core.cs 2.1.0
+nuget Humanizer.Core.da 2.1.0
+nuget Humanizer.Core.de 2.1.0
+nuget Humanizer.Core.el 2.1.0
+nuget Humanizer.Core.es 2.1.0
+nuget Humanizer.Core.fa 2.1.0
+nuget Humanizer.Core.fi-FI 2.1.0
+nuget Humanizer.Core.fr 2.1.0
+nuget Humanizer.Core.fr-BE 2.1.0
+nuget Humanizer.Core.he 2.1.0
+nuget Humanizer.Core.hr 2.1.0
+nuget Humanizer.Core.hu 2.1.0
+nuget Humanizer.Core.id 2.1.0
+nuget Humanizer.Core.it 2.1.0
+nuget Humanizer.Core.ja 2.1.0
+nuget Humanizer.Core.nb 2.1.0
+nuget Humanizer.Core.nb-NO 2.1.0
+nuget Humanizer.Core.nl 2.1.0
+nuget Humanizer.Core.pl 2.1.0
+nuget Humanizer.Core.pt 2.1.0
+nuget Humanizer.Core.ro 2.1.0
+nuget Humanizer.Core.ru 2.1.0
+nuget Humanizer.Core.sk 2.1.0
+nuget Humanizer.Core.sl 2.1.0
+nuget Humanizer.Core.sr 2.1.0
+nuget Humanizer.Core.sr-Latn 2.1.0
+nuget Humanizer.Core.sv 2.1.0
+nuget Humanizer.Core.tr 2.1.0
+nuget Humanizer.Core.uk 2.1.0
+nuget Humanizer.Core.uz-Cyrl-UZ 2.1.0
+nuget Humanizer.Core.uz-Latn-UZ 2.1.0
+nuget Humanizer.Core.vi 2.1.0
+nuget Humanizer.Core.zh-CN 2.1.0
+nuget Humanizer.Core.zh-Hans 2.1.0
+nuget Humanizer.Core.zh-Hant 2.1.0
+
