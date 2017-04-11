@@ -9,10 +9,11 @@
     <OutputType>Library</OutputType>
     <RootNamespace>FsGenerator</RootNamespace>
     <AssemblyName>FsGenerator</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFSharpCoreVersion>4.4.1.0</TargetFSharpCoreVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Name>FsGenerator</Name>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,7 +71,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FsCommons\FsCommons.Core\FsCommons.Core.fsproj">
+    <ProjectReference Include="..\..\FsCommons.Core\FsCommons.Core.fsproj">
       <Name>FsCommons.Core</Name>
       <Project>{330b7032-0045-4dca-bdbb-e2aba931bc49}</Project>
       <Private>True</Private>

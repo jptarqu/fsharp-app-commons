@@ -46,7 +46,6 @@
     <Compile Include="AssemblyInfo.fs" />
     <None Include="Script.fsx" />
     <Compile Include="Chessie.fs" />
-    <Compile Include="ConversionHelpers.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="CommonValidations.fs" />
   </ItemGroup>

@@ -64,5 +64,4 @@ module FileGeneration =
     let GenerateSqlTable<'t> generatedFolder (primaryKeyNames:string seq)=
         let code =  SqlTableGenerator.SqlTable<'t>(primaryKeyNames)
         let fileName = System.IO.Path.Combine(generatedFolder, (GetTypeName<'t>()) + ".sql")
-        let parentModule = (GetTypeName<'t>()) + "Component"
         GenerateSqlFile  fileName code

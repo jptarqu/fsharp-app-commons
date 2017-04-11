@@ -22,7 +22,15 @@ module SqlTableGenerator =
         | CommonDataRequirementsDate _ -> "Date"
 //        | CommonDataRequirementsDate _ -> "DateTime"
         | _ -> "varbinary(max)"
-    let buildSqlColumn p =
+    let IsPrimaryKey (primaryKeyNames:string seq) (propName:string)  =
+        match primaryKeyNames with
+        | [] -> propName.EndsWith("Id")
+        | _ ->  
+            primaryKeyNames
+            |> Seq.tryFind (fun pk -> pk ==  propName)
+            |> Option.IsSome
+    
+    let buildSqlColumn (primaryKeyNames:string seq) p =
         let customPrimitive = GetCommonDataRequirements p
         let sqlType = match customPrimitive with
                         | Some dataReqs -> 
@@ -34,7 +42,11 @@ module SqlTableGenerator =
                         //        | CommonDataRequirementsDate _ -> "DateTime"
                                 | _ -> "varbinary(max)"
                         | None -> convertPrimtiveToSqlType(p.PropertyType)
-        p.Name + " " + sqlType + " NOT NULL"
+        let colCode = p.Name + " " + sqlType + " NOT NULL"
+        if IsPrimaryKey primaryKeyNames p.Name then
+            colCode + " PRIMARY KEY identity"
+        else 
+            colCode
     let SqlTable<'t> (primaryKeyNames:string seq) = 
         let mytype = typeof< 't >
         let props = mytype.GetProperties()
@@ -44,5 +56,5 @@ module SqlTableGenerator =
         let header = "CREATE TABLE " + (pluralize mytype.Name)
         let cols = props
                     |> Seq.filter (fun p -> (primtiveProps |> Seq.contains p) || (customPrimtiveProps |> Seq.contains p))
-                    |> Seq.map (fun p -> "    \n" + (buildSqlColumn (p)) )
+                    |> Seq.map (fun p -> "    \n" + (buildSqlColumn primaryKeyNames p) )
         "" + header + "\n(\n" + (String.concat "," cols) + "\n)\n"

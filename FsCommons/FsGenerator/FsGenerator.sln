@@ -12,7 +12,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FsGenerator", "FsGenerator\
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FsGeneratorConsole", "FsGeneratorConsole\FsGeneratorConsole.fsproj", "{B891577E-65FA-4B38-A720-E6F741D2B650}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FsCommons.Core", "..\FsCommons\FsCommons.Core\FsCommons.Core.fsproj", "{330B7032-0045-4DCA-BDBB-E2ABA931BC49}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FsCommons.Core", "..\FsCommons.Core\FsCommons.Core.fsproj", "{330b7032-0045-4dca-bdbb-e2aba931bc49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
