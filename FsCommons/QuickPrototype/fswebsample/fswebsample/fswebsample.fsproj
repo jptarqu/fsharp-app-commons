@@ -68,9 +68,15 @@
     <Reference Include="System.ValueTuple">
       <HintPath>packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
-    
     <Reference Include="../node_modules/fable-core/Fable.Core.dll" />
     <Reference Include="../node_modules/fable-powerpack/Fable.PowerPack.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\FsCommons.Core\FsCommons.Core.fsproj">
+      <Name>FsCommons.Core</Name>
+      <Project>{330b7032-0045-4dca-bdbb-e2aba931bc49}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
