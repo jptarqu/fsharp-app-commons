@@ -23,12 +23,12 @@ module SqlTableGenerator =
 //        | CommonDataRequirementsDate _ -> "DateTime"
         | _ -> "varbinary(max)"
     let IsPrimaryKey (primaryKeyNames:string seq) (propName:string)  =
-        match primaryKeyNames with
-        | [] -> propName.EndsWith("Id")
-        | _ ->  
+        if (Seq.isEmpty primaryKeyNames) then 
+            propName.EndsWith("Id")
+        else
             primaryKeyNames
-            |> Seq.tryFind (fun pk -> pk ==  propName)
-            |> Option.IsSome
+            |> Seq.tryFind (fun pk -> pk =  propName)
+            |> Option.isSome
     
     let buildSqlColumn (primaryKeyNames:string seq) p =
         let customPrimitive = GetCommonDataRequirements p

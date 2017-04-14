@@ -1,0 +1,22 @@
+{
+    "projFile":  [
+        "../../FsCommons.Core/FsCommons.Core.fsproj",
+        "./fswebsample/fswebsample.fsproj"
+    ],
+    
+    "sourceMaps": false,
+	"plugins": ["./plugins/try-parse/Fable.Plugins.IntTryParse.dll", "./plugins/decimals/Fable.Plugins.Decimals.dll", "./plugins/char-check/Fable.Plugins.CharCheck.dll" ],
+    "outDir": "temp",
+    "scripts": {
+        "postbuild": "build.bat"
+    },
+    "rollup": {
+        "dest": "public/scripts/sample.js"
+        // "external": ["react", "react-dom"],
+        // "globals": {
+        //     "react": "React",
+        //     "react-dom": "ReactDOM"
+        // }
+    }
+   
+}

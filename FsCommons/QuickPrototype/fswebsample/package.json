@@ -1,0 +1,16 @@
+{
+  "name": "fswebsample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap-material-design": "^0.5.10",
+    "fable-core": "^0.7.30",
+    "fable-powerpack": "0.0.20"
+  }
+}
