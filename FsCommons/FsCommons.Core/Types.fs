@@ -27,6 +27,9 @@ type CommonDataRequirements =
     | CommonDataRequirementsDecimal of CommonDataRequirementsDecimal
     | CommonDataRequirementsDate of CommonDataRequirementsDate
 
+type ITextRenditionable<'T> =
+    abstract member NewFromRendition:string->'T
+    abstract member ToRendition:unit->string
 [<CLIMutableAttribute>]
 type SummaryError =
     { ErrorCode:string; Description:string;  }
@@ -34,6 +37,7 @@ type SummaryError =
 [<CLIMutableAttribute>]
 type PropertyError =
     { ErrorCode:string; Description:string; PropertyName:string; }
+    static member Undefined = seq { yield { ErrorCode= "UNDEFINED"; Description = "Property Error"; PropertyName = "ENTITY"; } }
     member this.DisplayAsPropErrorString () =
         sprintf "%s: %s"   this.PropertyName this.Description
     member this.PropOrEntityName = if this.PropertyName = "" then "Entity" else this.PropertyName 

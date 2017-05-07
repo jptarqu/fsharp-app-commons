@@ -48,6 +48,8 @@
     <Compile Include="Chessie.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="CommonValidations.fs" />
+    <Compile Include="BusinessTypes.fs" />
+    <Compile Include="Editable.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
