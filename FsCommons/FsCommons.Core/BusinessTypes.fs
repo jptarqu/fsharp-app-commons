@@ -1,9 +1,10 @@
 ﻿namespace FsCommons.Core
 
 module BusinessTypes =
-    open Chessie
+    open Chessie.ErrorHandling
     open System.Text.RegularExpressions
     open System
+
 
     type BzProp<'P, 'RawType> = 
         | Valid of 'P
@@ -180,6 +181,19 @@ module BusinessTypes =
         static member GetCommonDataRequirements() = 
             {CommonDataRequirementsString.Size = 20;  PrimitiveType = PrimitiveTypes.String; MinSize= 1;  }
        
+        static member FromRendition newValue = 
+            let validationResult = 
+                CommonValidations.ValidateDataRequirementsStr 
+                    (ShortName.GetCommonDataRequirements())
+                    ""
+                    newValue
+            match validationResult with
+            | Ok (validatedObj,_) -> 
+                pass { innerVal = validatedObj } 
+            | Bad (errors::_) ->
+                fail errors
+            | Bad ([]) ->
+                fail PropertyError.Undefined
         static member Create propName newValue = 
             let validationResult = 
                 CommonValidations.ValidateDataRequirementsStr 
@@ -193,9 +207,9 @@ module BusinessTypes =
                 BzProp.Invalid (newValue, errors)
             | Bad ([]) ->
                 BzProp.Invalid (newValue, PropertyError.Undefined)
+        member x.ToRendition() =
+            x.innerVal
         
-        static member ReCreate propName (oldProp:ShortName) = 
-            ShortName.Create propName oldProp.Val
             
     type OptionalEntry = 
         private { innerVal: string;  } 

@@ -49,6 +49,7 @@
     <Compile Include="Types.fs" />
     <Compile Include="CommonValidations.fs" />
     <Compile Include="BusinessTypes.fs" />
+    <Compile Include="Renditions.fs" />
     <Compile Include="Editable.fs" />
   </ItemGroup>
   <PropertyGroup>
