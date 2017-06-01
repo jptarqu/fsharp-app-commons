@@ -2,9 +2,11 @@
 
 module Editable =
     open Chessie.ErrorHandling
+    open System.ComponentModel
+    open System.Collections.Generic
+    open System
 
-    //let inline parseStr< ^T when ^T : (static member FromRendition: string->Result< ^T, PropertyError seq>) > str =
-    //        ^T.FromRendition str
+    
 
     type ITextEditable< 'P  >  = 
         abstract member FromRendition:string->'P

@@ -42,7 +42,7 @@ type PropertyError =
     { ErrorCode:string; Description:string; PropertyName:string; }
 
     static member Undefined = seq { yield { ErrorCode= "UNDEFINED"; Description = "Property Error"; PropertyName = "ENTITY"; } }
-    static member AsDescriptionList (errs:PropertyError seq) = errs |> Seq.map (fun p -> p.Description)
+    static member AsDescriptionList (errs:PropertyError seq) = errs |> Seq.toList |> List.map (fun p -> p.Description)
     member this.DisplayAsPropErrorString () =
         sprintf "%s: %s"   this.PropertyName this.Description
     member this.PropOrEntityName = if this.PropertyName = "" then "Entity" else this.PropertyName 
