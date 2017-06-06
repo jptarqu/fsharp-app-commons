@@ -38,6 +38,10 @@ module Base =
         let _observers = new LinkedList<IObserver<_,_>>()
         let errorsChanged = new Event<EventHandler<DataErrorsChangedEventArgs>, DataErrorsChangedEventArgs>()
         let propertyChanged = new Event<_, _>()
+        member x.AddError(err:string) =
+            if (currErros |> List.contains err |> not) then
+                currErros <- [ err ] @ currErros 
+                errorsChanged.Trigger(x, DataErrorsChangedEventArgs("Value"))
         member x.Value 
             with get() = currVal 
             and set(v:string) = 
