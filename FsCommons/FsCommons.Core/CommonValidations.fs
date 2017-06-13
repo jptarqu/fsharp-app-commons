@@ -381,7 +381,7 @@ module CommonValidations =
         match Seq.isEmpty validations with
         | true -> pass value
         | false -> fail validations
-    type ValidatorFunc<'Request, 'GoodResultType, 'ErrorType> = ('Request->Result<'GoodResultType, 'ErrorType>)
+    type ValidatorFunc<'Request, 'GoodResultType, 'ErrorType> = ('Request->RopResult<'GoodResultType, 'ErrorType>)
     let ValidateAll (validations:ValidatorFunc<'Request, 'GoodResultType, 'ErrorType> seq) req =
         let allResults = 
             validations
@@ -401,7 +401,7 @@ module CommonValidations =
         | true -> pass req
         | false -> fail allResults
         
-    let MergeResults (results:Result<'GoodResultType, 'ErrorType seq> seq) passValue =
+    let MergeResults (results:RopResult<'GoodResultType, 'ErrorType seq> seq) passValue =
         let allErrors = 
             results
             |> Seq.map  (fun r -> 
@@ -420,7 +420,7 @@ module CommonValidations =
         match Seq.isEmpty allErrors with
         | true -> pass passValue
         | false -> fail allErrors
-    let ValidateAllResults (results:Result<'GoodResultType, 'ErrorType> seq) onAllGood =
+    let ValidateAllResults (results:RopResult<'GoodResultType, 'ErrorType> seq) onAllGood =
         let allResults = 
             results
             |> Seq.filter  (fun r -> 

@@ -32,7 +32,7 @@ module Base =
         //    member this.Value with get() = this.Value and set(v) = this.Value <- v    
 
     [<AbstractClassAttribute>]
-    type TextEditable< 'P  >(defaultVal, parser: string -> Result<'P, PropertyError seq>) =
+    type TextEditable< 'P  >(defaultVal, parser: string -> RopResult<'P, PropertyError seq>) =
         let mutable currVal = defaultVal
         let mutable currErros:list<string> = [] 
         let _observers = new LinkedList<IObserver<_,_>>()

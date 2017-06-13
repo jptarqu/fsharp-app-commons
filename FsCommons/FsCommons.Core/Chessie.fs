@@ -4,35 +4,35 @@ namespace Chessie.ErrorHandling
 open System
 
 /// Represents the result of a computation.
-type Result<'TSuccess, 'TMessage> = 
+type RopResult<'TSuccess, 'TMessage> = 
     /// Represents the result of a successful computation.
     | Ok of 'TSuccess * 'TMessage list
     /// Represents the result of a failed computation.
     | Bad of 'TMessage list
 
     /// Creates a Failure result with the given messages.
-    static member FailWith(messages:'TMessage seq) : Result<'TSuccess, 'TMessage> = Result<'TSuccess, 'TMessage>.Bad(messages |> Seq.toList)
+    static member FailWith(messages:'TMessage seq) : RopResult<'TSuccess, 'TMessage> = RopResult<'TSuccess, 'TMessage>.Bad(messages |> Seq.toList)
 
-    /// Creates a Failure result with the given message.
-    static member FailWith(message:'TMessage) : Result<'TSuccess, 'TMessage> = Result<'TSuccess, 'TMessage>.Bad([message])
+    /// Creates a Failure RopResult with the given message.
+    static member FailWith(message:'TMessage) : RopResult<'TSuccess, 'TMessage> = RopResult<'TSuccess, 'TMessage>.Bad([message])
     
-    /// Creates a Success result with the given value.
-    static member Succeed(value:'TSuccess) : Result<'TSuccess, 'TMessage> = Result<'TSuccess, 'TMessage>.Ok(value,[])
+    /// Creates a Success RopResult with the given value.
+    static member Succeed(value:'TSuccess) : RopResult<'TSuccess, 'TMessage> = RopResult<'TSuccess, 'TMessage>.Ok(value,[])
 
-    /// Creates a Success result with the given value and the given message.
-    static member Succeed(value:'TSuccess,message:'TMessage) : Result<'TSuccess, 'TMessage> = Result<'TSuccess, 'TMessage>.Ok(value,[message])
+    /// Creates a Success RopResult with the given value and the given message.
+    static member Succeed(value:'TSuccess,message:'TMessage) : RopResult<'TSuccess, 'TMessage> = RopResult<'TSuccess, 'TMessage>.Ok(value,[message])
 
-    /// Creates a Success result with the given value and the given message.
-    static member Succeed(value:'TSuccess,messages:'TMessage seq) : Result<'TSuccess, 'TMessage> = Result<'TSuccess, 'TMessage>.Ok(value,messages |> Seq.toList)
+    /// Creates a Success RopResult with the given value and the given message.
+    static member Succeed(value:'TSuccess,messages:'TMessage seq) : RopResult<'TSuccess, 'TMessage> = RopResult<'TSuccess, 'TMessage>.Ok(value,messages |> Seq.toList)
 
     /// Executes the given function on a given success or captures the failure
-    static member Try(func: Func<_>) : Result<'TSuccess,exn> =        
+    static member Try(func: Func<_>) : RopResult<'TSuccess,exn> =        
         try
             Ok(func.Invoke(),[])
         with
         | exn -> Bad[exn]
 
-    /// Converts the result into a string.
+    /// Converts the RopResult into a string.
     override this.ToString() =
         match this with
         | Ok(v,msgs) -> sprintf "OK: %A - %s" v (String.Join("\n", msgs |> Seq.map (fun x -> x.ToString())))
@@ -42,34 +42,34 @@ type Result<'TSuccess, 'TMessage> =
 [<AutoOpen>]
 module Trial =  
     /// Wraps a value in a Success
-    let inline ok<'TSuccess,'TMessage> (x:'TSuccess) : Result<'TSuccess,'TMessage> = Ok(x, [])
+    let inline ok<'TSuccess,'TMessage> (x:'TSuccess) : RopResult<'TSuccess,'TMessage> = Ok(x, [])
 
     /// Wraps a value in a Success
-    let inline pass<'TSuccess,'TMessage> (x:'TSuccess) : Result<'TSuccess,'TMessage> = Ok(x, [])
+    let inline pass<'TSuccess,'TMessage> (x:'TSuccess) : RopResult<'TSuccess,'TMessage> = Ok(x, [])
 
     /// Wraps a value in a Success and adds a message
-    let inline warn<'TSuccess,'TMessage> (msg:'TMessage) (x:'TSuccess) : Result<'TSuccess,'TMessage> = Ok(x,[msg])
+    let inline warn<'TSuccess,'TMessage> (msg:'TMessage) (x:'TSuccess) : RopResult<'TSuccess,'TMessage> = Ok(x,[msg])
 
     /// Wraps a message in a Failure
-    let inline fail<'TSuccess,'Message> (msg:'Message) : Result<'TSuccess,'Message> = Bad([ msg ])
+    let inline fail<'TSuccess,'Message> (msg:'Message) : RopResult<'TSuccess,'Message> = Bad([ msg ])
 
     /// Executes the given function on a given success or captures the exception in a failure
-    let inline Catch f x = Result<_,_>.Try(fun () -> f x)
+    let inline Catch f x = RopResult<_,_>.Try(fun () -> f x)
 
-    /// Returns true if the result was not successful.
-    let inline failed result = 
-        match result with
+    /// Returns true if the RopResult was not successful.
+    let inline failed ropResult = 
+        match ropResult with
         | Bad _ -> true
         | _ -> false
 
-    /// Takes a Result and maps it with fSuccess if it is a Success otherwise it maps it with fFailure.
+    /// Takes a RopResult and maps it with fSuccess if it is a Success otherwise it maps it with fFailure.
     let inline either fSuccess fFailure trialResult = 
         match trialResult with
         | Ok(x, msgs) -> fSuccess (x, msgs)
         | Bad(msgs) -> fFailure (msgs)
 
-    /// If the given result is a Success the wrapped value will be returned. 
-    ///Otherwise the function throws an exception with Failure message of the result.
+    /// If the given RopResult is a Success the wrapped value will be returned. 
+    ///Otherwise the function throws an exception with Failure message of the RopResult.
     let inline returnOrFail result = 
         let inline raiseExn msgs = 
             msgs
@@ -92,7 +92,7 @@ module Trial =
         either fSuccess fFailure result
 
    /// Flattens a nested result given the Failure types are equal
-    let inline flatten (result : Result<Result<_,_>,_>) =
+    let inline flatten (result : RopResult<RopResult<_,_>,_>) =
         result |> bind id
 
     /// If the result is a Success it executes the given function on the value. 
@@ -114,7 +114,7 @@ module Trial =
     /// This is the infix operator version of ErrorHandling.apply
     let inline (<*>) wrappedFunction result = apply wrappedFunction result
 
-    /// Lifts a function into a Result container and applies it on the given result.
+    /// Lifts a function into a RopResult container and applies it on the given result.
     let inline lift f result = apply (ok f) result
 
     /// Maps a function over the existing error messages in case of failure. In case of success, the message type will be changed and warnings will be discarded.
@@ -123,7 +123,7 @@ module Trial =
         | Ok (v,_) -> ok v
         | Bad errs -> Bad (f errs)
 
-    /// Lifts a function into a Result and applies it on the given result.
+    /// Lifts a function into a RopResult and applies it on the given result.
     /// This is the infix operator version of ErrorHandling.lift
     let inline (<!>) f result = lift f result
 
@@ -132,18 +132,18 @@ module Trial =
 
     /// If the result is a Success it executes the given success function on the value and the messages.
     /// If the result is a Failure it executes the given failure function on the messages.
-    /// Result is propagated unchanged.
+    /// RopResult is propagated unchanged.
     let inline eitherTee fSuccess fFailure result =
         let inline tee f x = f x; x;
         tee (either fSuccess fFailure) result
 
     /// If the result is a Success it executes the given function on the value and the messages.
-    /// Result is propagated unchanged.
+    /// RopResult is propagated unchanged.
     let inline successTee f result = 
         eitherTee f ignore result
 
     /// If the result is a Failure it executes the given function on the messages.
-    /// Result is propagated unchanged.
+    /// RopResult is propagated unchanged.
     let inline failureTee f result = 
         eitherTee ignore f result
 
@@ -157,13 +157,13 @@ module Trial =
             | Bad(m1), Bad(m2) -> Bad(m1 @ m2)) (ok []) xs
         |> lift List.rev
 
-    /// Converts an option into a Result.
+    /// Converts an option into a RopResult.
     let inline failIfNone message result = 
         match result with
         | Some x -> ok x
         | None -> fail message
 
-    /// Converts a Choice into a Result.
+    /// Converts a Choice into a RopResult.
     let inline ofChoice choice =
         match choice with
         | Choice1Of2 v -> ok v
@@ -222,7 +222,7 @@ module Trial =
 /// Represents the result of an async computation
 [<NoComparison;NoEquality>]
 type AsyncResult<'a, 'b> = 
-    | AR of Async<Result<'a, 'b>>
+    | AR of Async<RopResult<'a, 'b>>
 
 /// Useful functions for combining error handling computations with async computations.
 [<AutoOpen>]
@@ -275,7 +275,7 @@ module AsyncTrial =
             |> Async.bind (either fSuccess fFailure)
             |> AR
         
-        member this.Bind(result : Result<'a, 'c>, binder : 'a -> AsyncResult<'b, 'c>) : AsyncResult<'b, 'c> = 
+        member this.Bind(result : RopResult<'a, 'c>, binder : 'a -> AsyncResult<'b, 'c>) : AsyncResult<'b, 'c> = 
             this.Bind(result
                       |> Async.singleton
                       |> AR, binder)

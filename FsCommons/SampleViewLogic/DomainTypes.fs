@@ -58,5 +58,8 @@ module Editable =
                 PrimitiveType = x.PrimitiveType.Value
                 MinSize = x.MinSize.Value
             }
-            
+        member x.FromRendition(rend: Rendition.PrimitiveDescriptor) =
+            x.Size.Value <- rend.Size
+            x.PrimitiveType.Value <- rend.PrimitiveType
+            x.MinSize.Value <- rend.MinSize
         

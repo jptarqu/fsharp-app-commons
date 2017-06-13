@@ -51,8 +51,9 @@
     <Compile Include="MyViewLogic.fs" />
     <None Include="Script.fsx" />
     <Compile Include="StringPrimitiveScreen.fs" />
-    <Compile Include="Editable.fs" />
+    <Compile Include="DomainTypes.fs" />
     <Compile Include="ModelUpdater.fs" />
+    <Compile Include="SampleScreenViewModel.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FsCommons.Core\FsCommons.Core.fsproj">

@@ -117,7 +117,7 @@
       <Project>{330b7032-0045-4dca-bdbb-e2aba931bc49}</Project>
       <Name>FsCommons.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MyViews\MyViews.csproj">
+    <ProjectReference Include="..\SampleViews\SampleViews.csproj">
       <Project>{ab86d734-32fe-4bed-b9f5-b86e9a639a46}</Project>
       <Name>MyViews</Name>
     </ProjectReference>
