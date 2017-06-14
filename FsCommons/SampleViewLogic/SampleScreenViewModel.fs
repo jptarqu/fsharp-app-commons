@@ -11,7 +11,7 @@ type SampleScreenViewModel() =
         ()
     let updater = Updater(viewModel.ToRendition(), callback)
     let notifyMinsize () =
-        updater.SendMsg (Msg.MinSize viewModel.MinSize.Value, viewModel.ToRendition())
+        updater.SendMsg (Msg.MinSize viewModel.MinSize.Value)
     do viewModel.MinSize.Add( 
         fun newVal -> 
             notifyMinsize()
