@@ -58,8 +58,14 @@ module Editable =
                 PrimitiveType = x.PrimitiveType.Value
                 MinSize = x.MinSize.Value
             }
+        member x.ToDomain()  =
+            Domain.PrimitiveDescriptor.FromRendition (x.ToRendition())
         member x.FromRendition(rend: Rendition.PrimitiveDescriptor) =
             x.Size.Value <- rend.Size
             x.PrimitiveType.Value <- rend.PrimitiveType
             x.MinSize.Value <- rend.MinSize
+        member x.FromDomain(model: Domain.PrimitiveDescriptor) =
+            x.Size.Value <- model.Size.ToRendition()
+            x.PrimitiveType.Value <- model.PrimitiveType.ToRendition()
+            x.MinSize.Value <- model.MinSize.ToRendition()
         

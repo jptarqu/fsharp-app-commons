@@ -34,6 +34,7 @@ module Base =
     [<AbstractClassAttribute>]
     type TextEditable< 'P  >(defaultVal, parser: string -> RopResult<'P, PropertyError seq>) =
         let mutable currVal = defaultVal
+        let mutable currParsedDomain:'P option  = None
         let mutable currErros:list<string> = [] 
         let _observers = new LinkedList<IObserver<_,_>>()
         let errorsChanged = new Event<EventHandler<DataErrorsChangedEventArgs>, DataErrorsChangedEventArgs>()
@@ -42,6 +43,8 @@ module Base =
             if (currErros |> List.contains err |> not) then
                 currErros <- [ err ] @ currErros 
                 errorsChanged.Trigger(x, DataErrorsChangedEventArgs("Value"))
+        member x.DomainValue 
+            with get() = currParsedDomain 
         member x.Value 
             with get() = currVal 
             and set(v:string) = 
@@ -51,10 +54,13 @@ module Base =
                     match parser v with
                     | Ok (validatedObj,_) -> 
                         currErros <- [] 
+                        currParsedDomain <- Some validatedObj
                     | Bad (errors::_) ->
                         currErros <-  (PropertyError.AsDescriptionList errors )
+                        currParsedDomain <- None
                     | Bad ([]) ->
                         currErros <- [] 
+                        currParsedDomain <- None
                     errorsChanged.Trigger(x, DataErrorsChangedEventArgs("Value"))
         
         interface IObservable<PropertyChangedEventArgs> with
