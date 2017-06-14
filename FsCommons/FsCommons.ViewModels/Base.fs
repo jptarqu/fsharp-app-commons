@@ -77,3 +77,11 @@ module Base =
             [<CLIEvent>]
             member this.ErrorsChanged = errorsChanged.Publish
         
+        
+        member x.MsgOnChanged msgSender newMsgBuilder  =
+            x.Add(
+                fun propChgEvt ->
+
+                    printfn "Prop changed %s" propChgEvt.PropertyName
+                    msgSender (newMsgBuilder x.Value)
+                )

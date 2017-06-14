@@ -49,23 +49,7 @@ module ModelUpdater =
     | PrimitiveType  of ShortName
     | MinSize  of ShortName
     | ModelEdited of PrimitiveDescriptor
-
-
-    type EntityErrors = string seq
-    type AsyncCmds = CmdRequestMsg list
-    type ReplyMessageForRendition = 
-        EntityErrors * Rendition.PrimitiveDescriptor 
-    type ReplyMessage = 
-        EntityErrors * PrimitiveDescriptor 
-    type AgentReplyMessage =
-        ReplyMessage * AsyncCmds //TODO: Maybe named them??
-    type EditMessage =
-        Msg 
-    type AgentEditMessage =
-        EditMessage * AsyncReplyChannel<AgentReplyMessage >
-
-    type Updater(initModel:PrimitiveDescriptor, callback:ReplyMessage->unit) = //Action<ReplyMessage>) = //I think what we want here is the pure model or the rendtion, not the editable model
-        let updateFromMsg currModel msg = //keeping the rendition as state may bring more performance?
+    let updateFromMsg currModel msg = //keeping the rendition as state may bring more performance? Nope, you ned up building the domain model in the ViewModel
             //dummy chg
             let domainLogicAttempt =
                 trial {
@@ -95,42 +79,20 @@ module ModelUpdater =
                     (PropertyError.AsDescriptionList errors) , currModel, [] //TODO somehow the errors need to part of the rendition???
                 | Bad ([]) ->
                     [], currModel, []
+
+
+    type EntityErrors = string seq
+    type AsyncCmds = CmdRequestMsg list
+    type ReplyMessageForRendition = 
+        EntityErrors * Rendition.PrimitiveDescriptor 
+    type ReplyMessage = 
+        EntityErrors * PrimitiveDescriptor 
+    type AgentReplyMessage =
+        ReplyMessage * AsyncCmds //TODO: Maybe named them??
+    type EditMessage =
+        Msg 
+    type AgentEditMessage =
+        EditMessage * AsyncReplyChannel<AgentReplyMessage >
         
-        let updateFromRenditionOld (newRendition:Rendition.PrimitiveDescriptor) msg =
-            //dummy chg
-            let dummyChanged = 
-                if newRendition.MinSize.Length > 3 then
-                    { newRendition with Size = "blo"}
-                else 
-                    newRendition
-            let modelConversionResult =  dummyChanged |> Domain.PrimitiveDescriptor.FromRendition 
-            let errs, computedRendition,  cmds =
-                match modelConversionResult with
-                | Ok _ -> [], dummyChanged,  [CmdRequestMsg.NoOp]
-                | Bad (errors::_) ->
-                    [], dummyChanged, [] //TODO somehow the errors need to part of the rendition???
-                | Bad ([]) ->
-                    [], dummyChanged, []
-            errs, computedRendition,  cmds
-        let mbox = MailboxProcessor.Start(fun (mbox:MailboxProcessor<AgentEditMessage>) ->
-            // Represents the blocked state
-            let startTime = DateTime.Now
-            let rec loop (currModel:PrimitiveDescriptor) = 
-                async {
-                    let! payLoad, channel = mbox.Receive()
-                    let msg = payLoad
-                    let errs, computedRendition,  cmds = updateFromMsg currModel msg
-                    channel.Reply ((errs |> List.toSeq, computedRendition), cmds)
-                    return! loop computedRendition
-                }
-            loop initModel
-          )
-        member x.AsyncSendMsg (msg:EditMessage) =
-            async {
-                let! (reply,cmds) = mbox.PostAndAsyncReply((fun reply -> (msg, reply)), timeout = 2000)
-                callback (reply)
-            } |> Async.StartImmediate
-        member x.SendMsg (msg:EditMessage) =
-            let (reply,cmds) = mbox.PostAndReply((fun reply -> (msg, reply)))
-            callback (reply)
+    
 
