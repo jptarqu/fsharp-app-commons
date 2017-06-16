@@ -18,6 +18,7 @@ module ModelUpdater =
     | Size of string
     | PrimitiveType  of string
     | MinSize  of string
+    | SaveCmd
     let updateRenditionFromMsg currRendition (msg:MsgPrimitive) = //keeping the rendition as state may bring more performance?
             //dummy chg
             
@@ -32,13 +33,15 @@ module ModelUpdater =
                         { currRendition with Size = "blo"; MinSize = newVal}
                     else 
                         { currRendition with MinSize = newVal}
+                | MsgPrimitive.SaveCmd  ->
+                    currRendition
                    
             let modelConversionResult =  newRendition |> Domain.PrimitiveDescriptor.FromRendition 
             let errs, computedRendition,  cmds =
                 match modelConversionResult with
                 | Ok _ -> [], newRendition,  [CmdRequestMsg.NoOp]
                 | Bad (errors::_) ->
-                    [], newRendition, [] //TODO somehow the errors need to part of the rendition???
+                    (PropertyError.AsDescriptionList  errors), newRendition, [] //TODO somehow the errors need to part of the rendition???
                 | Bad ([]) ->
                     [], newRendition, []
             errs, computedRendition,  cmds

@@ -7,12 +7,24 @@ module Base =
     open System.Reactive
     open System
     open FsCommons.Core
+    open System.Windows.Input
 
 
     //let inline parseStr< ^T when ^T : (static member FromRendition: string->Result< ^T, PropertyError seq>) > str =
     //        ^T.FromRendition str
 
-    // TODO make ViewModel alternative for Editable primitive
+    // https://bizmonger.wordpress.com/2016/03/20/f-and-wpf-the-delegatecommand/
+    type DelegateCommand( canExecute:(obj -> bool)) =
+        let event = new DelegateEvent<EventHandler>()
+        static member Create canExecute =
+            DelegateCommand (canExecute) :> ICommand
+        member this.RaiseCanExecuteChanged () = event.Trigger([| this |])
+        member val Callback:unit->unit = fun () -> () with get, set
+        interface ICommand with
+            [<CLIEvent>]
+            member this.CanExecuteChanged = event.Publish
+            member this.CanExecute arg = canExecute(arg)
+            member this.Execute arg = this.Callback()
 
     // https://github.com/fsprojects/FSharp.ViewModule/blob/master/src/FSharp.ViewModule/Factory.fs
     type public NotifyingValue<'a>(defaultValue) =
@@ -30,7 +42,7 @@ module Base =
                 obs.Subscribe observer
         //interface INotifyingValue<'a> with
         //    member this.Value with get() = this.Value and set(v) = this.Value <- v    
-
+   
     [<AbstractClassAttribute>]
     type TextEditable< 'P  >(defaultVal, parser: string -> RopResult<'P, PropertyError seq>) =
         let mutable currVal = defaultVal

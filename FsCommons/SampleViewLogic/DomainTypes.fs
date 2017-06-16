@@ -39,18 +39,21 @@ module Editable =
     open FsCommons.Core
     open FsCommons.ViewModels
     open Chessie.ErrorHandling
+    open System.Collections.ObjectModel
             
     type PrimitiveDescriptor = 
         { 
             Size : Editable.ShortName 
             PrimitiveType : Editable.ShortName 
             MinSize : Editable.ShortName 
+            Errors : ObservableCollection<string>
         }
         static member Empty () =
              { 
                 Size = Editable.ShortName() 
                 PrimitiveType = Editable.ShortName() 
                 MinSize = Editable.ShortName() 
+                Errors = ObservableCollection<string>()
             }
         member x.ToRendition() : Rendition.PrimitiveDescriptor =
             { 
@@ -68,4 +71,5 @@ module Editable =
             x.Size.Value <- model.Size.ToRendition()
             x.PrimitiveType.Value <- model.PrimitiveType.ToRendition()
             x.MinSize.Value <- model.MinSize.ToRendition()
+        
         
