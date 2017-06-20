@@ -23,7 +23,7 @@ type SampleScreenViewModel() =
             currErrs.Add(err)
         saveCmd.RaiseCanExecuteChanged()
         ()
-    let updater = Updater(viewModel.ToRendition(), ModelUpdater.updateRenditionFromMsg, callback) 
+    let updater = Updater(viewModel.ToRendition(), ModelUpdater.updateRenditionFromMsg, callback, ModelUpdater.executeAsyncCmds) 
 
     let saveFunc _ =
         updater.SendMsg MsgPrimitive.SaveCmd

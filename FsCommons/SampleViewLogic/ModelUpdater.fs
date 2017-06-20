@@ -13,37 +13,47 @@ module ModelUpdater =
     type CmdRequestMsg =
     | Save of Rendition.PrimitiveDescriptor
     | NoOp
-
     type MsgPrimitive =
     | Size of string
     | PrimitiveType  of string
     | MinSize  of string
     | SaveCmd
+    
+    let executeAsyncCmds msgSender (cmd:CmdRequestMsg) =
+        async {
+            match cmd with
+            | Save obj ->
+                do! Async.Sleep(10000)
+                msgSender (Size "Done Saving")
+            | NoOp ->
+                ()
+        }
+
     let updateRenditionFromMsg currRendition (msg:MsgPrimitive) = //keeping the rendition as state may bring more performance?
             //dummy chg
             
-            let newRendition:Rendition.PrimitiveDescriptor =
+            let ((newRendition, cmds):Rendition.PrimitiveDescriptor * CmdRequestMsg list) =
                 match msg with
                 | MsgPrimitive.Size newVal ->
-                    { currRendition with Size = newVal}
+                    { currRendition with Size = newVal},  []
                 | MsgPrimitive.PrimitiveType  newVal ->
-                    { currRendition with PrimitiveType = newVal}
+                    { currRendition with PrimitiveType = newVal},  []
                 | MsgPrimitive.MinSize  newVal ->
                     if newVal.Length > 3 then
-                        { currRendition with Size = "blo"; MinSize = newVal}
+                        { currRendition with Size = "blo"; MinSize = newVal},  []
                     else 
-                        { currRendition with MinSize = newVal}
+                        { currRendition with MinSize = newVal},  []
                 | MsgPrimitive.SaveCmd  ->
-                    currRendition
+                    currRendition,  [CmdRequestMsg.Save currRendition]
                    
             let modelConversionResult =  newRendition |> Domain.PrimitiveDescriptor.FromRendition 
-            let errs, computedRendition,  cmds =
+            let errs, computedRendition =
                 match modelConversionResult with
-                | Ok _ -> [], newRendition,  [CmdRequestMsg.NoOp]
+                | Ok _ -> [], newRendition
                 | Bad (errors::_) ->
-                    (PropertyError.AsDescriptionList  errors), newRendition, [] //TODO somehow the errors need to part of the rendition???
+                    (PropertyError.AsDescriptionList  errors), newRendition //TODO somehow the errors need to part of the rendition???
                 | Bad ([]) ->
-                    [], newRendition, []
+                    [], newRendition
             errs, computedRendition,  cmds
 
     //We just happen to choose to only accept valid domain primitives

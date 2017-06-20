@@ -18,7 +18,7 @@ module Base =
         let event = new DelegateEvent<EventHandler>()
         static member Create canExecute =
             DelegateCommand (canExecute) :> ICommand
-        member this.RaiseCanExecuteChanged () = event.Trigger([| this |])
+        member this.RaiseCanExecuteChanged () = event.Trigger([| this ; EventArgs.Empty |])
         member val Callback:unit->unit = fun () -> () with get, set
         interface ICommand with
             [<CLIEvent>]
