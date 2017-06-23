@@ -327,6 +327,19 @@ module CommonValidations =
         match Seq.isEmpty validations with
         | true -> pass value
         | false -> fail validations
+
+    let StartsWithLetter (value:string) =
+        if (not (System.String.IsNullOrEmpty(value))) && (not (Char.IsLetter(value.[0]))) then
+            fail (seq [{ PropertyError.ErrorCode = ""; Description = "Must start with a letter"; PropertyName = "" }]) //("Must start with a letter")
+        else
+            ok value
+            
+    let FailIfStartsWith prefix (value:string) =
+        if (not (System.String.IsNullOrEmpty(value))) && value.StartsWith(prefix) then
+            fail ("Must not start with " + prefix)
+        else 
+            ok value
+
     let isWithinRange minVal maxVal value =
         match value with
         | v when v > maxVal -> fail ("Must not be more than " + maxVal.ToString())

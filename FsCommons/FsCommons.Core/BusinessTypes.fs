@@ -487,3 +487,30 @@ module BusinessTypes =
             createPropDate FutureDate.commonDataReqs (fun r -> { FutureDate.innerVal = r } ) propName  newVal
         static member ReCreate propName (oldProp:FutureDate) = 
             FutureDate.Create propName (oldProp.Val.ToString())
+          
+    type ProgrammingIdentifier = 
+        private { innerVal: string;  } 
+        member x.Val = x.innerVal 
+        static member GetCommonDataRequirements() = 
+            {CommonDataRequirementsStringPattern.Size = 20;  PrimitiveType = PrimitiveTypes.String; MinSize= 1; RegexPattern = null; 
+                CharValidation = Char.IsLetterOrDigit }
+       
+        static member FromRendition newValue = 
+            let validationResult = 
+                CommonValidations.MergeResults
+                    [
+                        (CommonValidations.ValidateDataRequirementsStrPattern 
+                                (ProgrammingIdentifier.GetCommonDataRequirements())
+                                ""
+                                newValue);
+                        CommonValidations.StartsWithLetter newValue
+                    ]
+                    newValue
+             
+            match validationResult with
+            | Ok (validatedObj,_) -> 
+                pass { innerVal = validatedObj } 
+            | Bad (errors::_) ->
+                fail errors
+            | Bad ([]) ->
+                fail PropertyError.Undefined

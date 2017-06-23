@@ -50,8 +50,8 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="MyViewLogic.fs" />
     <None Include="Script.fsx" />
-    <Compile Include="StringPrimitiveScreen.fs" />
     <Compile Include="DomainTypes.fs" />
+    <Compile Include="StringPrimitiveScreen.fs" />
     <Compile Include="ModelUpdater.fs" />
     <Compile Include="SampleScreenViewModel.fs" />
   </ItemGroup>
