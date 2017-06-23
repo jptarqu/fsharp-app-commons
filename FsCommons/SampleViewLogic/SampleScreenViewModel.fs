@@ -9,7 +9,7 @@ open FsCommons.ViewModels.Base
 open System.Windows.Input
 
 type SampleScreenViewModel() =
-    let viewModel = Editable.PrimitiveDescriptor.Empty()
+    let viewModel = Editable.StringPrimitiveDescriptor.Empty()
     let canSaveFunc _ =
         viewModel.Errors |> Seq.isEmpty
     let saveCmd = DelegateCommand(canSaveFunc)
@@ -37,7 +37,7 @@ type SampleScreenViewModel() =
     let msgSender = (updater.SendMsg)
     do saveCmd.Callback <- saveFunc
     do viewModel.MinSize.MsgOnChanged msgSender MsgPrimitive.MinSize
-    do viewModel.PrimitiveType.MsgOnChanged msgSender MsgPrimitive.PrimitiveType
+    do viewModel.TypeName.MsgOnChanged msgSender MsgPrimitive.PrimitiveType
     do viewModel.Size.MsgOnChanged msgSender MsgPrimitive.Size
 
     member x.PrimDescViewModel 

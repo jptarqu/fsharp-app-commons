@@ -3,11 +3,11 @@
 module Rendition =
     open FsCommons.Core
 
-    type PrimitiveDescriptor = 
+    type StringPrimitiveDescriptor = 
         { 
-            Size : Renditions.ShortName 
-            PrimitiveType : Renditions.ShortName 
-            MinSize : Renditions.ShortName 
+            Size : Renditions.PositiveInt 
+            TypeName : Renditions.ProgrammingIdentifier 
+            MinSize : Renditions.PositiveInt 
         }
 module Domain =
     open FsCommons.Core
@@ -15,21 +15,21 @@ module Domain =
     open System.Windows
     open BusinessTypes
                 
-    type PrimitiveDescriptor = 
+    type StringPrimitiveDescriptor = 
         { 
-            Size : ShortName 
-            PrimitiveType : ShortName 
-            MinSize : ShortName 
+            Size : PositiveInt 
+            TypeName : ProgrammingIdentifier 
+            MinSize : PositiveInt 
         }
-        static member FromRendition (rendition:Rendition.PrimitiveDescriptor) = 
+        static member FromRendition (rendition:Rendition.StringPrimitiveDescriptor) = 
             trial {
-                let! size = ShortName.FromRendition  rendition.Size
-                let! primitiveType = ShortName.FromRendition  rendition.PrimitiveType
-                let! minSize = ShortName.FromRendition  rendition.MinSize
+                let! size = PositiveInt.FromRendition  rendition.Size
+                let! typeName = ProgrammingIdentifier.FromRendition  rendition.TypeName
+                let! minSize = PositiveInt.FromRendition  rendition.MinSize
                 return 
                     { 
                         Size = size
-                        PrimitiveType = primitiveType
+                        TypeName = typeName
                         MinSize = minSize
                     }
             }
@@ -41,35 +41,35 @@ module Editable =
     open Chessie.ErrorHandling
     open System.Collections.ObjectModel
             
-    type PrimitiveDescriptor = 
+    type StringPrimitiveDescriptor = 
         { 
-            Size : Editable.ShortName 
-            PrimitiveType : Editable.ShortName 
-            MinSize : Editable.ShortName 
+            Size : Editable.PositiveInt 
+            TypeName : Editable.ShortName 
+            MinSize : Editable.PositiveInt 
             Errors : ObservableCollection<string>
         }
         static member Empty () =
              { 
-                Size = Editable.ShortName() 
-                PrimitiveType = Editable.ShortName() 
-                MinSize = Editable.ShortName() 
+                Size = Editable.PositiveInt() 
+                TypeName = Editable.ShortName() 
+                MinSize = Editable.PositiveInt() 
                 Errors = ObservableCollection<string>()
             }
-        member x.ToRendition() : Rendition.PrimitiveDescriptor =
+        member x.ToRendition() : Rendition.StringPrimitiveDescriptor =
             { 
                 Size = x.Size.Value
-                PrimitiveType = x.PrimitiveType.Value
+                TypeName = x.TypeName.Value
                 MinSize = x.MinSize.Value
             }
         member x.ToDomain()  =
-            Domain.PrimitiveDescriptor.FromRendition (x.ToRendition())
-        member x.FromRendition(rend: Rendition.PrimitiveDescriptor) =
+            Domain.StringPrimitiveDescriptor.FromRendition (x.ToRendition())
+        member x.FromRendition(rend: Rendition.StringPrimitiveDescriptor) =
             x.Size.Value <- rend.Size
-            x.PrimitiveType.Value <- rend.PrimitiveType
+            x.TypeName.Value <- rend.TypeName
             x.MinSize.Value <- rend.MinSize
-        member x.FromDomain(model: Domain.PrimitiveDescriptor) =
+        member x.FromDomain(model: Domain.StringPrimitiveDescriptor) =
             x.Size.Value <- model.Size.ToRendition()
-            x.PrimitiveType.Value <- model.PrimitiveType.ToRendition()
+            x.TypeName.Value <- model.TypeName.ToRendition()
             x.MinSize.Value <- model.MinSize.ToRendition()
         
         

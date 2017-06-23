@@ -97,6 +97,24 @@ module BusinessTypes =
             | Bad ([]) ->
                 BzProp.Invalid (newValue, PropertyError.Undefined)
                       
+    let fromRendIntStr commonDataReqs fromRawValue  (newValue:string) =
+        let parsedVal = ConversionHelpers.tryParseInt newValue
+            
+        match parsedVal with
+        | None -> fail (seq [ { PropertyError.ErrorCode ="PROP"; Description = "Must be numeric"; PropertyName = "" }  ])
+        | Some numericVal -> 
+            let validationResult = 
+                    CommonValidations.ValidateDataRequirementsInt 
+                        commonDataReqs
+                        ""
+                        numericVal
+            match validationResult with
+            | Ok (validatedObj,_) -> 
+                pass (fromRawValue(validatedObj))
+            | Bad (errors::_) ->
+                fail  errors
+            | Bad ([]) ->
+                fail PropertyError.Undefined
     let createPropDecimalStr commonDataReqs fromRawValue propName  (newValue:string) =
         let parsedVal = ConversionHelpers.tryParseDecimal newValue
             
@@ -389,9 +407,11 @@ module BusinessTypes =
         static member commonDataReqs = {CommonDataRequirementsInt.PrimitiveType = PrimitiveTypes.Integer; MinValue= 1; MaxValue = 99999999  }
         static member GetCommonDataRequirements() = PositiveInt.commonDataReqs
         static member FromRendition  newValue = 
-            createPropIntStr PositiveInt.commonDataReqs (fun r -> { PositiveInt.innerVal = r } ) ""  newValue
+            fromRendIntStr PositiveInt.commonDataReqs (fun v -> { innerVal =v })  newValue
         static member ToRendition  obj = 
             obj.innerVal.ToString()
+        member x.ToRendition() =
+            x.innerVal.ToString()
         
 
     type PositiveMoneyAmount =
@@ -514,3 +534,5 @@ module BusinessTypes =
                 fail errors
             | Bad ([]) ->
                 fail PropertyError.Undefined
+        member x.ToRendition() =
+            x.innerVal

@@ -5,7 +5,7 @@ open FsCommons.Core
 module StringPrimitiveScreen =
     type Msg =
         | MinSize of string
-        | PrimitiveType of string
+        | TypeName of string
         | Size of string
 
     //type Screen(view:MyViews.StringPrimitiveEditControl,initialModel:CommonDataRequirementsString) =

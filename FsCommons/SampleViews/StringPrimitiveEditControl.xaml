@@ -25,10 +25,10 @@
                 <RowDefinition Height="121*"/>
                 <RowDefinition Height="59*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0"  Margin="8,0,8,7" TextWrapping="Wrap" TextAlignment="Right" VerticalAlignment="Bottom" Text="Size"  />
-            <TextBox   Grid.Row="0"  x:FieldModifier="public" x:Name="SizeTxt" Grid.Column="1"  Margin="8,8,8,0" TextWrapping="Wrap" Text="{Binding Size.Value}"  VerticalAlignment="Top"/>
-            <TextBlock Grid.Row="1"   Margin="8,0,8,6" TextWrapping="Wrap" TextAlignment="Right" VerticalAlignment="Bottom" Text="Primitive Type" />
-            <TextBox   Grid.Row="1"  x:FieldModifier="public" x:Name="PrimitiveTypeTxt" Grid.Column="1"  Margin="8,9,8,0" TextWrapping="Wrap" Text="{Binding PrimitiveType.Value}"  VerticalAlignment="Top"/>
+            <TextBlock Grid.Row="0"   Margin="8,0,8,6" TextWrapping="Wrap" TextAlignment="Right" VerticalAlignment="Bottom" Text="Name" />
+            <TextBox   Grid.Row="0"  x:FieldModifier="public" x:Name="PrimitiveTypeTxt" Grid.Column="1"  Margin="8,9,8,0" TextWrapping="Wrap" Text="{Binding TypeName.Value}"  VerticalAlignment="Top"/>
+            <TextBlock Grid.Row="1"  Margin="8,0,8,7" TextWrapping="Wrap" TextAlignment="Right" VerticalAlignment="Bottom" Text="Size"  />
+            <TextBox   Grid.Row="1"  x:FieldModifier="public" x:Name="SizeTxt" Grid.Column="1"  Margin="8,8,8,0" TextWrapping="Wrap" Text="{Binding Size.Value}"  VerticalAlignment="Top"/>
             <TextBlock Grid.Row="2"   Margin="8,0,8,5" TextWrapping="Wrap" TextAlignment="Right" VerticalAlignment="Bottom" Text="Min Size" />
             <TextBox   Grid.Row="2" x:FieldModifier="public" x:Name="MinSizeTxt" Grid.Column="1"  Margin="8,10,8,0" TextWrapping="Wrap" Text="{Binding MinSize.Value}"  VerticalAlignment="Top"/>
         </Grid>

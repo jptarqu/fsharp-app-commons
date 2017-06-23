@@ -31,20 +31,21 @@ module Editable =
     //    | TextEditable.Valid goodObj ->  (goodObj :> ITextRenditionable<'P>).ToRendition()
     //    | TextEditable.Invalid (newValue, errors) -> newValue
 
-    type ShortName = 
-        private { CurrValue : string ; Errors: string seq }
-        static member Empty () =
-            { CurrValue = ""; Errors = Seq.empty}
-        interface ITextEditable<ShortName>
-            with 
-                member x.FromRendition str =
-                    match BusinessTypes.ShortName.FromRendition str with
-                    | Ok (validatedObj,_) -> 
-                        { CurrValue = str; Errors = Seq.empty} 
-                    | Bad (errors::_) ->
-                        { CurrValue = str; Errors =  PropertyError.AsDescriptionList errors}  
-                    | Bad ([]) ->
-                        { CurrValue = str; Errors = Seq.empty} 
-                member x.ToRendition () = 
-                    x.CurrValue
+    //type ShortName = 
+    //    private { CurrValue : string ; Errors: string seq }
+    //    static member Empty () =
+    //        { CurrValue = ""; Errors = Seq.empty}
+    //    interface ITextEditable<ShortName>
+    //        with 
+    //            member x.FromRendition str =
+    //                match BusinessTypes.ShortName.FromRendition str with
+    //                | Ok (validatedObj,_) -> 
+    //                    { CurrValue = str; Errors = Seq.empty} 
+    //                | Bad (errors::_) ->
+    //                    { CurrValue = str; Errors =  PropertyError.AsDescriptionList errors}  
+    //                | Bad ([]) ->
+    //                    { CurrValue = str; Errors = Seq.empty} 
+    //            member x.ToRendition () = 
+    //                x.CurrValue
+    
     
