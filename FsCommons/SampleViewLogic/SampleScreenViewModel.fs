@@ -8,8 +8,9 @@ open FsCommons.ViewModels
 open FsCommons.ViewModels.Base
 open System.Windows.Input
 
-type SampleScreenViewModel() =
+type SampleScreenViewModel(initialRendtion: Rendition.StringPrimitiveDescriptor) =
     let viewModel = Editable.StringPrimitiveDescriptor.Empty()
+    do viewModel.FromRendition(initialRendtion)
     let canSaveFunc _ =
         viewModel.Errors |> Seq.isEmpty
     let saveCmd = DelegateCommand(canSaveFunc)

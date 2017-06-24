@@ -51,11 +51,13 @@
     <Compile Include="MyViewLogic.fs" />
     <None Include="Script.fsx" />
     <Compile Include="DomainTypes.fs" />
+    <Compile Include="Navigation.fs" />
     <Compile Include="StringPrimitiveScreen.fs" />
     <Compile Include="ModelUpdater.fs" />
     <Compile Include="SampleScreenViewModel.fs" />
     <Compile Include="ListUpdater.fs" />
     <Compile Include="PrimitivesListScreenViewModel.fs" />
+    <Compile Include="NavigationViewModel.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FsCommons.Core\FsCommons.Core.fsproj">
