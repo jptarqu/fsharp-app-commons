@@ -31,7 +31,8 @@ module Rendition =
             with get() =
                 match x with
                 | StringPrimitiveDescriptor d -> sprintf "Size: %s | Min Size: %s" d.Size d.MinSize
-
+    type PrimitiveDescriptorList =
+        PrimitiveDescriptor seq
 module Domain =
     open FsCommons.Core
     open Chessie.ErrorHandling

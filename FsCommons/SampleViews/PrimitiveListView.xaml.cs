@@ -20,9 +20,12 @@ namespace MyViews
     /// </summary>
     public partial class PrimitiveListView : UserControl
     {
+        private readonly MyViewLogic.PrimitivesListScreenViewModel _currViewModel;
         public PrimitiveListView()
         {
             InitializeComponent();
+            _currViewModel = new MyViewLogic.PrimitivesListScreenViewModel();
+            this.DataContext = _currViewModel;
         }
     }
 }

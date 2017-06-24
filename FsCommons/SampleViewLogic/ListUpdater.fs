@@ -39,21 +39,19 @@ module ListUpdater =
                 ()
         }
 
-    let updateRenditionFromMsg currRendition (msg:Msg) = //keeping the rendition as state may bring more performance?
+    let updateRenditionFromMsg (currRendition:PrimitiveDescriptorList) (msg:Msg) = //keeping the rendition as state may bring more performance?
             //dummy chg
             
-            let ((newRendition, cmds):EditableCollectionViewModel<PrimitiveDescriptor> * CmdRequestMsg list) =
+            let ((newRendition, cmds):PrimitiveDescriptorList * CmdRequestMsg list) =
                 match msg with
                 | Msg.LoadRecords  ->
                     currRendition,  [CmdRequestMsg.LoadRecords ]
                 | Msg.RecordsLoaded  records ->
-                    currRendition.Clear()
-                    currRendition.AddRange records
-                    currRendition,  []
+                    records,  []
                 | Msg.Open  newVal ->
                     currRendition,  []
                  
-            [], currRendition,  cmds
+            [], newRendition,  cmds
             
     //type EntityErrors = string seq
     //type AsyncCmds = CmdRequestMsg list

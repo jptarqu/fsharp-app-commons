@@ -17,7 +17,8 @@
         FontFamily="{DynamicResource MaterialDesignFont}">
     <Grid>
 
-        <MyViews:StringPrimitiveEditControl x:Name="MyUserControl" />
+        <!--<MyViews:StringPrimitiveEditControl x:Name="MyUserControl" />-->
+        <MyViews:PrimitiveListView x:Name="MyUserControl" />
 
     </Grid>
 </Window>

@@ -31,7 +31,7 @@ module EditableCollections =
         member x.Clear () =
             items.Clear()
         member x.AddRange newItems =
-            for item in items do    
+            for item in newItems do    
                 items.Add item
         member x.Add newItem =
             items.Add newItem
