@@ -17,7 +17,7 @@
             
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <materialDesign:Card Margin="4 4 0 0" Width="200">
+                    <materialDesign:Card Margin="4 4 0 0" Width="200" >
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -31,8 +31,8 @@
                                     <materialDesign:PackIcon Kind="Delete" />
                                 </Button>
                             </StackPanel>
-                            
-                            <StackPanel Grid.Row="1" Margin="8 24 8 0" >
+
+                            <StackPanel Grid.Row="1" Margin="8 24 8 0" DataContext="{Binding Model}">
                                 <TextBlock FontWeight="Bold" Text="{Binding Name}" />
                                 <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding Description}"/>
 
@@ -40,7 +40,7 @@
                             
                             <Button Grid.Row="2" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
                         HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                        Margin="0 0 4 4">
+                        Margin="0 0 4 4" Command="{Binding EditCmd}">
                                 <materialDesign:PackIcon Kind="Pencil" />
                             </Button>
                         </Grid>

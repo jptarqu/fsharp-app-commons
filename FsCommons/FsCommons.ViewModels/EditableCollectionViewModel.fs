@@ -5,6 +5,16 @@ module EditableCollections =
     open Base
     open FsCommons.Core
     open System.Collections.ObjectModel
+    open System.Windows.Input
+    
+    type EditableListItemViewModel<'Model>(rendition, editFunc) =
+        let editCmd = DelegateCommand(fun _ -> true)
+    
+        do editCmd.Callback <- editFunc
+        member x.EditCmd 
+            with get() = editCmd  :> ICommand
+        member x.Model 
+            with get() = rendition 
 
     type EditableCollectionViewModel<'Item >() =
         let items = ObservableCollection<'Item>()  

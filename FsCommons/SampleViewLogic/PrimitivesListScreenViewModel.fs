@@ -10,17 +10,22 @@ open FsCommons.ViewModels.EditableCollections
 open Rendition
 open ListUpdater
 
+    
 type PrimitivesListScreenViewModel()=
-    let viewModel = EditableCollectionViewModel<PrimitiveDescriptor>()
+    let viewModel = EditableCollectionViewModel<EditableListItemViewModel<PrimitiveDescriptor>>()
+    let sendMsgToParent _ =
+        printf "Call Navigation Parent somehow"
     let callback (errs,newRend) =
         printfn "Called! %A" newRend
         viewModel.Clear()
-        viewModel.AddRange newRend
+        let newItems = newRend |> Seq.map (fun i ->  (EditableListItemViewModel(i, sendMsgToParent)))
+        viewModel.AddRange newItems
         printfn "Called! %d" viewModel.Items.Count
 
     let intialRendtion = Seq.empty
     let updater = Updater(intialRendtion, ListUpdater.updateRenditionFromMsg, callback, ListUpdater.executeAsyncCmds) 
     let msgSender = (updater.SendMsg)
+    
     do msgSender Msg.LoadRecords
     member x.ViewModel 
         with get() = viewModel 

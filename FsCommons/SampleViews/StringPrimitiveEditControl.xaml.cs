@@ -29,8 +29,8 @@ namespace MyViews
         public StringPrimitiveEditControl()
         {
             InitializeComponent();
-            _currEditModel = new MyViewLogic.SampleScreenViewModel();
-            this.DataContext = _currEditModel;
+            //_currEditModel = new MyViewLogic.SampleScreenViewModel();
+            //this.DataContext = _currEditModel;
 
             //Maybe this go inside the screen viewmodel??
             //_updater = new Updater(_currEditModel.ToRendition(), UpdateCallback);

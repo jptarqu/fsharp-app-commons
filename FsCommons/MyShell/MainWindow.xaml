@@ -18,7 +18,7 @@
     <Grid>
 
         <!--<MyViews:StringPrimitiveEditControl x:Name="MyUserControl" />-->
-        <MyViews:PrimitiveListView x:Name="MyUserControl" />
+        <MyViews:NavigationView x:Name="MyUserControl" />
 
     </Grid>
 </Window>
