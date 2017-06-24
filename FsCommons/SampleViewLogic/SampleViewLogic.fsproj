@@ -54,6 +54,8 @@
     <Compile Include="StringPrimitiveScreen.fs" />
     <Compile Include="ModelUpdater.fs" />
     <Compile Include="SampleScreenViewModel.fs" />
+    <Compile Include="ListUpdater.fs" />
+    <Compile Include="PrimitivesListScreenViewModel.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FsCommons.Core\FsCommons.Core.fsproj">

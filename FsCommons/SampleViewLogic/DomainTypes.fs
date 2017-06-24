@@ -9,6 +9,29 @@ module Rendition =
             TypeName : Renditions.ProgrammingIdentifier 
             MinSize : Renditions.PositiveInt 
         }
+        //static member Factory(size:int, name:string, minSize:int) =
+        //    { 
+        //        Size = size.ToString()
+        //        TypeName = (name)
+        //        MinSize = (minSize.ToString())
+        //    }
+    let CreateStringPrimitiveDescriptor(size:int, name:string, minSize:int) : StringPrimitiveDescriptor=
+            { 
+                Size = size.ToString()
+                TypeName = (name)
+                MinSize = (minSize.ToString())
+            }
+    type PrimitiveDescriptor =
+        | StringPrimitiveDescriptor of StringPrimitiveDescriptor
+        member x.Name
+            with get() =
+                match x with
+                | StringPrimitiveDescriptor d -> d.TypeName
+        member x.Description
+            with get() =
+                match x with
+                | StringPrimitiveDescriptor d -> sprintf "Size: %s | Min Size: %s" d.Size d.MinSize
+
 module Domain =
     open FsCommons.Core
     open Chessie.ErrorHandling
