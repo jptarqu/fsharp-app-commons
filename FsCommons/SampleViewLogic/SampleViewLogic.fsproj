@@ -48,10 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="MyViewLogic.fs" />
     <None Include="Script.fsx" />
-    <Compile Include="DomainTypes.fs" />
-    <Compile Include="Navigation.fs" />
+    <Compile Include="EditableTypes.fs" />
     <Compile Include="StringPrimitiveScreen.fs" />
     <Compile Include="ModelUpdater.fs" />
     <Compile Include="SampleScreenViewModel.fs" />
@@ -68,6 +66,11 @@
     <ProjectReference Include="..\FsCommons.ViewModels\FsCommons.ViewModels.fsproj">
       <Name>FsCommons.ViewModels</Name>
       <Project>{706b0a4f-5469-4d19-827e-777ca14e1b04}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SampleCore\SampleCore.fsproj">
+      <Name>SampleCore</Name>
+      <Project>{4c1aa8b9-b590-46d2-88c2-bd3c1cb8f9d2}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

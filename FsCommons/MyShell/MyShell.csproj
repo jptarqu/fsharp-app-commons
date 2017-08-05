@@ -117,6 +117,10 @@
       <Project>{330b7032-0045-4dca-bdbb-e2aba931bc49}</Project>
       <Name>FsCommons.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SampleCore\SampleCore.fsproj">
+      <Project>{4c1aa8b9-b590-46d2-88c2-bd3c1cb8f9d2}</Project>
+      <Name>SampleCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SampleViews\SampleViews.csproj">
       <Project>{ab86d734-32fe-4bed-b9f5-b86e9a639a46}</Project>
       <Name>MyViews</Name>

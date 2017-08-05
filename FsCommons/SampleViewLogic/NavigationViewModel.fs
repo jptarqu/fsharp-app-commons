@@ -1,8 +1,9 @@
 ﻿namespace MyViewLogic
 
-open Navigation
 open System.ComponentModel
-open Rendition
+open SampleCore.Navigation
+open Editable
+open SampleCore.Rendition
 
 type ChildScreen =
     | PrimitivesListScreenViewModel of PrimitivesListScreenViewModel

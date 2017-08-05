@@ -3,14 +3,14 @@
 open System
 
 module ListUpdater =
-    open MyViewLogic.Domain
+    open SampleCore.Domain
     open MyViewLogic
     open Chessie.ErrorHandling.Trial
     open Chessie.ErrorHandling
     open BusinessTypes
     open FsCommons.ViewModels.EditableCollections
-    open MyViewLogic.Rendition
-
+    open SampleCore
+    open SampleCore.Rendition
         
     type CmdRequestMsg =
     | Open of Rendition.PrimitiveDescriptor

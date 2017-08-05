@@ -118,6 +118,10 @@
       <Project>{706b0a4f-5469-4d19-827e-777ca14e1b04}</Project>
       <Name>FsCommons.ViewModels</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SampleCore\SampleCore.fsproj">
+      <Project>{4c1aa8b9-b590-46d2-88c2-bd3c1cb8f9d2}</Project>
+      <Name>SampleCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SampleViewLogic\SampleViewLogic.fsproj">
       <Project>{10a8bf1b-16c6-45a0-9d0c-f4d86c662e22}</Project>
       <Name>SampleViewLogic</Name>

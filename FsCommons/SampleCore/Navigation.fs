@@ -1,4 +1,4 @@
-﻿namespace MyViewLogic
+﻿namespace SampleCore
 
 module Navigation =
     open Rendition

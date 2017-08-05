@@ -3,11 +3,12 @@
 open System
 
 module ModelUpdater =
-    open MyViewLogic.Domain
+    open SampleCore.Domain
     open MyViewLogic
     open Chessie.ErrorHandling.Trial
     open Chessie.ErrorHandling
     open BusinessTypes
+    open SampleCore
 
         
     type CmdRequestMsg =

@@ -7,6 +7,7 @@ open FsCommons.Core
 open FsCommons.ViewModels
 open FsCommons.ViewModels.Base
 open System.Windows.Input
+open SampleCore
 
 type SampleScreenViewModel(initialRendtion: Rendition.StringPrimitiveDescriptor) =
     let viewModel = Editable.StringPrimitiveDescriptor.Empty()

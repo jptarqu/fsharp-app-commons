@@ -1,26 +1,21 @@
 ﻿namespace MyViewLogic
 
-open Chessie.ErrorHandling
-open System.ComponentModel
 open FsCommons.Core
 open FsCommons.ViewModels
-open FsCommons.ViewModels.Base
-open System.Windows.Input
 open FsCommons.ViewModels.EditableCollections
-open Rendition
 open ListUpdater
-open Navigation
+open SampleCore.Navigation
+open SampleCore.Rendition
 
     
 type PrimitivesListScreenViewModel(navService: INavigationService)=
     let viewModel = EditableCollectionViewModel<EditableListItemViewModel<PrimitiveDescriptor>>()
-    let sendMsgToParent item =
-        printf "Call Navigation Parent somehow"
+    let editFunc item =
         navService.NavigateTo (NavigationMsg.GoToPrimitiveEdit item)
     let callback (errs,newRend) =
         printfn "Called! %A" newRend
         viewModel.Clear()
-        let newItems = newRend |> Seq.map (fun i ->  (EditableListItemViewModel(i, sendMsgToParent)))
+        let newItems = newRend |> Seq.map (fun i ->  (EditableListItemViewModel(i, editFunc)))
         viewModel.AddRange newItems
         printfn "Called! %d" viewModel.Items.Count
 
