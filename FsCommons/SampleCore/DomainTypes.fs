@@ -8,6 +8,7 @@ module Rendition =
             Size : Renditions.PositiveInt 
             TypeName : Renditions.ProgrammingIdentifier 
             MinSize : Renditions.PositiveInt 
+            EditDone: bool
         }
         //static member Factory(size:int, name:string, minSize:int) =
         //    { 
@@ -20,6 +21,7 @@ module Rendition =
                 Size = size.ToString()
                 TypeName = (name)
                 MinSize = (minSize.ToString())
+                EditDone = false
             }
     type PrimitiveDescriptor =
         | StringPrimitiveDescriptor of StringPrimitiveDescriptor

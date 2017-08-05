@@ -8,7 +8,7 @@ open SampleCore.DataService
 
 type ChildScreen =
     | PrimitivesListScreenViewModel of PrimitivesListScreenViewModel
-    | SampleScreenViewModel of SampleScreenViewModel
+    | SampleScreenViewModel of EditScreenViewModel
 
 type NavigationViewModel(dataService: IDataService ) as this =
     let propertyChanged = new Event<_, _>()
@@ -30,6 +30,6 @@ type NavigationViewModel(dataService: IDataService ) as this =
             | GoToPrimitiveEdit editObj ->
                 match editObj with
                 | StringPrimitiveDescriptor d ->
-                    x.CurrScreen <- ChildScreen.SampleScreenViewModel (new SampleScreenViewModel(d))  
+                    x.CurrScreen <- ChildScreen.SampleScreenViewModel (new EditScreenViewModel(d, x, dataService))  
 
             ()

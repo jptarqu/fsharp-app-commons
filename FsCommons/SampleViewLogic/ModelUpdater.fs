@@ -9,6 +9,8 @@ module ModelUpdater =
     open Chessie.ErrorHandling
     open BusinessTypes
     open SampleCore
+    open SampleCore.DataService
+    open SampleCore.Navigation
 
         
     type CmdRequestMsg =
@@ -19,18 +21,21 @@ module ModelUpdater =
     | PrimitiveType  of string
     | MinSize  of string
     | SaveCmd
+    | GoBackCmd
     
-    let executeAsyncCmds msgSender (cmd:CmdRequestMsg) =
+    let executeAsyncCmds (dataService: IDataService) msgSender (cmd:CmdRequestMsg) =
         async {
             match cmd with
             | Save obj ->
-                do! Async.Sleep(10000)
-                msgSender (Size "Done Saving")
+                let toSave = Rendition.PrimitiveDescriptor.StringPrimitiveDescriptor obj
+                dataService.Save(toSave)
+                //do! Async.Sleep(10000)
+                msgSender GoBackCmd
             | NoOp ->
                 ()
         }
 
-    let updateRenditionFromMsg currRendition (msg:MsgPrimitive) = //keeping the rendition as state may bring more performance?
+    let updateRenditionFromMsg  currRendition (msg:MsgPrimitive) = //keeping the rendition as state may bring more performance?
             //dummy chg
             
             let ((newRendition, cmds):Rendition.StringPrimitiveDescriptor * CmdRequestMsg list) =
@@ -46,6 +51,8 @@ module ModelUpdater =
                         { currRendition with MinSize = newVal},  []
                 | MsgPrimitive.SaveCmd  ->
                     currRendition,  [CmdRequestMsg.Save currRendition]
+                | MsgPrimitive.GoBackCmd ->
+                    { currRendition with EditDone = true},  [] // TODO does navigation belong to Updater or ViewModel?
                    
             let modelConversionResult =  newRendition |> Domain.StringPrimitiveDescriptor.FromRendition 
             let errs, computedRendition =

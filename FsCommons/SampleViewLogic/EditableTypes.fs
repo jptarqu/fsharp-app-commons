@@ -26,6 +26,7 @@ module Editable =
                 Size = x.Size.Value
                 TypeName = x.TypeName.Value
                 MinSize = x.MinSize.Value
+                EditDone = false
             }
         member x.ToDomain()  =
             Domain.StringPrimitiveDescriptor.FromRendition (x.ToRendition())

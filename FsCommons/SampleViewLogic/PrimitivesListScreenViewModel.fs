@@ -12,7 +12,7 @@ open SampleCore.DataService
 type PrimitivesListScreenViewModel(navService: INavigationService, dataService: IDataService)=
     let viewModel = EditableCollectionViewModel<EditableListItemViewModel<PrimitiveDescriptor>>()
     let editFunc item =
-        navService.NavigateTo (NavigationMsg.GoToPrimitiveEdit item)
+        navService.NavigateTo (NavigationMsg.GoToPrimitiveEdit item) // TODO does navigation belong to Updater or ViewModel?
     let refreshViewModel (errs,newRend) =
         printfn "Called! %A" newRend
         viewModel.Clear()

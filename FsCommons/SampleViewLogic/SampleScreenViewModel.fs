@@ -8,16 +8,20 @@ open FsCommons.ViewModels
 open FsCommons.ViewModels.Base
 open System.Windows.Input
 open SampleCore
+open SampleCore.DataService
+open SampleCore.Navigation
 
-type SampleScreenViewModel(initialRendtion: Rendition.StringPrimitiveDescriptor) =
+type EditScreenViewModel(initialRendtion: Rendition.StringPrimitiveDescriptor, navService: INavigationService, dataService: IDataService ) =
     let viewModel = Editable.StringPrimitiveDescriptor.Empty()
     do viewModel.FromRendition(initialRendtion)
     let canSaveFunc _ =
         viewModel.Errors |> Seq.isEmpty
     let saveCmd = DelegateCommand(canSaveFunc)
         
-    let callback (errs,newRend) =
+    let callback (errs,newRend: Rendition.StringPrimitiveDescriptor) =
         printfn "Called! %A" newRend
+        if (newRend.EditDone) then
+            navService.NavigateTo(NavigationMsg.GoToPrimitivesList)
         viewModel.FromRendition(newRend)
         let currErrs = viewModel.Errors
         currErrs.Clear()
@@ -25,7 +29,7 @@ type SampleScreenViewModel(initialRendtion: Rendition.StringPrimitiveDescriptor)
             currErrs.Add(err)
         saveCmd.RaiseCanExecuteChanged()
         ()
-    let updater = Updater(viewModel.ToRendition(), ModelUpdater.updateRenditionFromMsg, callback, ModelUpdater.executeAsyncCmds) 
+    let updater = Updater(viewModel.ToRendition(), ModelUpdater.updateRenditionFromMsg, callback, ModelUpdater.executeAsyncCmds dataService) 
 
     let saveFunc _ =
         updater.SendMsg MsgPrimitive.SaveCmd
