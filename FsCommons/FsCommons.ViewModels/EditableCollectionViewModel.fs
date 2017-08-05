@@ -7,10 +7,10 @@ module EditableCollections =
     open System.Collections.ObjectModel
     open System.Windows.Input
     
-    type EditableListItemViewModel<'Model>(rendition, editFunc) =
+    type EditableListItemViewModel<'Model>(rendition, editFunc:'Model->unit) =
         let editCmd = DelegateCommand(fun _ -> true)
     
-        do editCmd.Callback <- editFunc
+        do editCmd.Callback <- (fun () -> editFunc rendition)
         member x.EditCmd 
             with get() = editCmd  :> ICommand
         member x.Model 
@@ -27,17 +27,6 @@ module EditableCollections =
             and set(v) = 
                 selectedItem <- v
                     
-            //with get() = 
-            //    match selectedItem with
-            //    | None -> null
-            //    | Some s -> (s)
-            //and set(v:'Item) = 
-            //    if isNull(v) then
-            //        selectedItem <- None
-            //    else 
-            //        selectedItem <- Some v
-        //member x.SelectedItem
-        //    with get() = selectedItem
         member x.Clear () =
             items.Clear()
         member x.AddRange newItems =

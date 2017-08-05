@@ -9,12 +9,14 @@ open System.Windows.Input
 open FsCommons.ViewModels.EditableCollections
 open Rendition
 open ListUpdater
+open Navigation
 
     
-type PrimitivesListScreenViewModel()=
+type PrimitivesListScreenViewModel(navService: INavigationService)=
     let viewModel = EditableCollectionViewModel<EditableListItemViewModel<PrimitiveDescriptor>>()
-    let sendMsgToParent _ =
+    let sendMsgToParent item =
         printf "Call Navigation Parent somehow"
+        navService.NavigateTo (NavigationMsg.GoToPrimitiveEdit item)
     let callback (errs,newRend) =
         printfn "Called! %A" newRend
         viewModel.Clear()

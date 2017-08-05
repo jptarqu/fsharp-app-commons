@@ -25,7 +25,7 @@ namespace MyViews
     public partial class StringPrimitiveEditControl : UserControl
     {
 
-        private readonly MyViewLogic.SampleScreenViewModel _currEditModel;
+        //private readonly MyViewLogic.SampleScreenViewModel _currEditModel;
         public StringPrimitiveEditControl()
         {
             InitializeComponent();

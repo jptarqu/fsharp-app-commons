@@ -24,8 +24,8 @@ namespace MyViews
         public PrimitiveListView()
         {
             InitializeComponent();
-            _currViewModel = new MyViewLogic.PrimitivesListScreenViewModel();
-            this.DataContext = _currViewModel;
+            ////_currViewModel = new MyViewLogic.PrimitivesListScreenViewModel();
+            ////this.DataContext = _currViewModel;
         }
     }
 }

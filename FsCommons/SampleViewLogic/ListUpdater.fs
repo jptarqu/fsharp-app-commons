@@ -39,9 +39,7 @@ module ListUpdater =
                 ()
         }
 
-    let updateRenditionFromMsg (currRendition:PrimitiveDescriptorList) (msg:Msg) = //keeping the rendition as state may bring more performance?
-            //dummy chg
-            
+    let updateRenditionFromMsg (currRendition:PrimitiveDescriptorList) (msg:Msg) = 
             let ((newRendition, cmds):PrimitiveDescriptorList * CmdRequestMsg list) =
                 match msg with
                 | Msg.LoadRecords  ->
@@ -53,18 +51,7 @@ module ListUpdater =
                  
             [], newRendition,  cmds
             
-    //type EntityErrors = string seq
-    //type AsyncCmds = CmdRequestMsg list
-    //type ReplyMessageForRendition = 
-    //    EntityErrors * Rendition.StringPrimitiveDescriptor 
-    //type ReplyMessage = 
-    //    EntityErrors * StringPrimitiveDescriptor 
-    //type AgentReplyMessage =
-    //    ReplyMessage * AsyncCmds //TODO: Maybe name them??
-    //type EditMessage =
-    //    Msg 
-    //type AgentEditMessage =
-    //    EditMessage * AsyncReplyChannel<AgentReplyMessage >
+
         
     
 

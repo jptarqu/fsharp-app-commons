@@ -8,9 +8,9 @@ type ChildScreen =
     | PrimitivesListScreenViewModel of PrimitivesListScreenViewModel
     | SampleScreenViewModel of SampleScreenViewModel
 
-type NavigationViewModel() =
+type NavigationViewModel() as this =
     let propertyChanged = new Event<_, _>()
-    let mutable (currScreen:ChildScreen) = ChildScreen.PrimitivesListScreenViewModel (new PrimitivesListScreenViewModel())   
+    let mutable (currScreen:ChildScreen) = ChildScreen.PrimitivesListScreenViewModel (new PrimitivesListScreenViewModel(this))   
     member x.CurrScreen 
         with get() = currScreen 
         and set(v) = 
@@ -24,7 +24,7 @@ type NavigationViewModel() =
         member x.NavigateTo (msg:NavigationMsg) =
             match msg with
             | GoToPrimitivesList -> 
-                x.CurrScreen <- ChildScreen.PrimitivesListScreenViewModel (new PrimitivesListScreenViewModel())  
+                x.CurrScreen <- ChildScreen.PrimitivesListScreenViewModel (new PrimitivesListScreenViewModel(x))  
             | GoToPrimitiveEdit editObj ->
                 match editObj with
                 | StringPrimitiveDescriptor d ->
