@@ -4,14 +4,15 @@ open System.ComponentModel
 open SampleCore.Navigation
 open Editable
 open SampleCore.Rendition
+open SampleCore.DataService
 
 type ChildScreen =
     | PrimitivesListScreenViewModel of PrimitivesListScreenViewModel
     | SampleScreenViewModel of SampleScreenViewModel
 
-type NavigationViewModel() as this =
+type NavigationViewModel(dataService: IDataService ) as this =
     let propertyChanged = new Event<_, _>()
-    let mutable (currScreen:ChildScreen) = ChildScreen.PrimitivesListScreenViewModel (new PrimitivesListScreenViewModel(this))   
+    let mutable (currScreen:ChildScreen) = ChildScreen.PrimitivesListScreenViewModel (new PrimitivesListScreenViewModel(this, dataService))   
     member x.CurrScreen 
         with get() = currScreen 
         and set(v) = 
@@ -25,7 +26,7 @@ type NavigationViewModel() as this =
         member x.NavigateTo (msg:NavigationMsg) =
             match msg with
             | GoToPrimitivesList -> 
-                x.CurrScreen <- ChildScreen.PrimitivesListScreenViewModel (new PrimitivesListScreenViewModel(x))  
+                x.CurrScreen <- ChildScreen.PrimitivesListScreenViewModel (new PrimitivesListScreenViewModel(x, dataService))  
             | GoToPrimitiveEdit editObj ->
                 match editObj with
                 | StringPrimitiveDescriptor d ->

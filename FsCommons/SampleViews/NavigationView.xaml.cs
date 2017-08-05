@@ -22,7 +22,7 @@ namespace MyViews
     /// </summary>
     public partial class NavigationView : UserControl
     {
-        private NavigationViewModel _service = new NavigationViewModel();
+        private NavigationViewModel _service = new NavigationViewModel(new SampleCore.DataService.DummyDataService());
         public NavigationView()
         {
             InitializeComponent();

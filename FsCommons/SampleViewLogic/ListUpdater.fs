@@ -11,6 +11,7 @@ module ListUpdater =
     open FsCommons.ViewModels.EditableCollections
     open SampleCore
     open SampleCore.Rendition
+    open SampleCore.DataService
         
     type CmdRequestMsg =
     | Open of Rendition.PrimitiveDescriptor
@@ -21,20 +22,15 @@ module ListUpdater =
     | LoadRecords 
     | Open  of Rendition.PrimitiveDescriptor
     
-    let sampleRecords =
-        [
-              Rendition.PrimitiveDescriptor.StringPrimitiveDescriptor(  Rendition.CreateStringPrimitiveDescriptor(20,"Email",1) )
-              Rendition.PrimitiveDescriptor.StringPrimitiveDescriptor(  Rendition.CreateStringPrimitiveDescriptor(20,"ShortName",1) )
-              Rendition.PrimitiveDescriptor.StringPrimitiveDescriptor(  Rendition.CreateStringPrimitiveDescriptor(8,"Anniversay",8) )
-        ]
-    let executeAsyncCmds msgSender (cmd:CmdRequestMsg) =
+    let executeAsyncCmds (dataService:IDataService) msgSender (cmd:CmdRequestMsg) =
         async {
             match cmd with
             | CmdRequestMsg.Open obj ->
                 do! Async.Sleep(2000)
             | CmdRequestMsg.LoadRecords  ->
                 do! Async.Sleep(2000)
-                msgSender (Msg.RecordsLoaded sampleRecords)
+                let items = dataService.GetAll()
+                msgSender (Msg.RecordsLoaded items)
             | NoOp ->
                 ()
         }
