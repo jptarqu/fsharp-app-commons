@@ -1,5 +1,7 @@
 ﻿namespace FsCommons.ViewModels
 
+open FsCommons.Core.Editable
+
 //type UpdaterImpl(initModel:PrimitiveDescriptor, callback:ReplyMessage->unit) = //Action<ReplyMessage>) = //I think what we want here is the pure model or the rendtion, not the editable model
         
 //        let mbox = MailboxProcessor.Start(fun (mbox:MailboxProcessor<AgentEditMessage>) ->
@@ -23,19 +25,19 @@
 //        member x.SendMsg (msg:EditMessage) =
 //            let (reply,cmds) = mbox.PostAndReply((fun reply -> (msg, reply)))
 //            callback (reply)
-type Updater<'RenditionType, 'ErrorType, 'EditMsg, 'CmdMsg >(initModel:'RenditionType, 
-                                                                updateFromMsg:'RenditionType->'EditMsg->('ErrorType list *'RenditionType * 'CmdMsg list), 
-                                                                callback:'ErrorType list * 'RenditionType->unit,
+type Updater<'RenditionType, 'ErrorType, 'EditMsg, 'CmdMsg >(initModel:EditInfo<'RenditionType>, 
+                                                                updateFromMsg:EditInfo<'RenditionType>->'EditMsg->(EditInfo<'RenditionType> * 'CmdMsg list), 
+                                                                callback:EditInfo<'RenditionType>->unit,
                                                                 asyncCmdHandler: ('EditMsg->unit)->'CmdMsg->Async<unit>
                                                                 ) = //Action<ReplyMessage>) = //I think what we want here is the pure model or the rendtion, not the editable model
         
-    let mbox = MailboxProcessor.Start(fun (mbox:MailboxProcessor<'EditMsg * AsyncReplyChannel<( 'ErrorType list * 'RenditionType) * 'CmdMsg list>>) ->
-        let rec loop (currModel:'RenditionType) = 
+    let mbox = MailboxProcessor.Start(fun (mbox:MailboxProcessor<'EditMsg * AsyncReplyChannel<(EditInfo<'RenditionType>) * 'CmdMsg list>>) ->
+        let rec loop (currModel:EditInfo<'RenditionType>) = 
             async {
                 let! payLoad, channel = mbox.Receive()
                 let msg = payLoad
-                let errs, newModel,  cmds = updateFromMsg currModel msg
-                channel.Reply ((errs , newModel), cmds)
+                let newModel,  cmds = updateFromMsg currModel msg
+                channel.Reply (newModel, cmds)
                 return! loop newModel
             }
         loop initModel

@@ -11,6 +11,15 @@ module Editable =
     type ITextEditable< 'P  >  = 
         abstract member FromRendition:string->'P
         abstract member ToRendition:unit->string
+
+    type EditInfo<'T> =
+        {
+            LastUpdated : DateTime option
+            EditSessionEnded: bool
+            EditErrors: PropertyError seq
+            IsDirty: bool
+            ObjectBeingEdited: 'T
+        }
     //type TextEditable< 'P  >  = 
     //    { CurrValue : string ; LastParse: Result<'P, PropertyError seq> option; Parser: string->Result< 'P, PropertyError seq>  }
         
