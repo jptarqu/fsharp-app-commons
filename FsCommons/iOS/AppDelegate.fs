@@ -6,18 +6,16 @@ open Foundation
 open Xamarin.Forms
 open Xamarin.Forms.Platform.iOS
 
-[<Register ("AppDelegate")>]
-type AppDelegate () =
-    inherit FormsApplicationDelegate ()
-
-    override this.FinishedLaunching (app, options) =
+[<Register("AppDelegate")>]
+type AppDelegate() = 
+    inherit FormsApplicationDelegate()
+    override this.FinishedLaunching(app, options) = 
         Forms.Init()
-        this.LoadApplication (new SamplesXamarin.App())
+        this.LoadApplication(new MyMobileShell.App())
         base.FinishedLaunching(app, options)
 
-module Main =
+module Main = 
     [<EntryPoint>]
-    let main args =
+    let main args = 
         UIApplication.Main(args, null, "AppDelegate")
         0
-
