@@ -35,7 +35,8 @@ module ListUpdater =
                 ()
         }
 
-    let updateRenditionFromMsg (currRendition:PrimitiveDescriptorList) (msg:Msg) = 
+    let updateRenditionFromMsg (currSession:Editable.ReadOnlyInfo<PrimitiveDescriptorList>) (msg:Msg) = 
+            let currRendition = currSession.ReadOnlyObject
             let ((newRendition, cmds):PrimitiveDescriptorList * CmdRequestMsg list) =
                 match msg with
                 | Msg.LoadRecords  ->
@@ -45,7 +46,7 @@ module ListUpdater =
                 | Msg.Open  newVal ->
                     currRendition,  []
                  
-            [], newRendition,  cmds
+            {currSession with ReadOnlyObject = newRendition},  cmds
             
 
         

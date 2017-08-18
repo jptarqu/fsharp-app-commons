@@ -11,6 +11,7 @@ module ModelUpdater =
     open SampleCore
     open SampleCore.DataService
     open SampleCore.Navigation
+    open Editable
 
         
     type CmdRequestMsg =
@@ -35,9 +36,9 @@ module ModelUpdater =
                 ()
         }
 
-    let updateRenditionFromMsg  currRendition (msg:MsgPrimitive) = //keeping the rendition as state may bring more performance?
-            //dummy chg
-            
+    let updateRenditionFromMsg  (currentEdit:EditInfo<_>) (msg:MsgPrimitive) = //keeping the rendition as state may bring more performance?
+            //1. Update rendition from msg
+            let currRendition = currentEdit.ObjectBeingEdited 
             let ((newRendition, cmds):Rendition.StringPrimitiveDescriptor * CmdRequestMsg list) =
                 match msg with
                 | MsgPrimitive.Size newVal ->
@@ -51,18 +52,23 @@ module ModelUpdater =
                         { currRendition with MinSize = newVal},  []
                 | MsgPrimitive.SaveCmd  ->
                     currRendition,  [CmdRequestMsg.Save currRendition]
-                | MsgPrimitive.GoBackCmd ->
-                    { currRendition with EditDone = true},  [] // TODO does navigation belong to Updater or ViewModel?
-                   
+                | MsgPrimitive.GoBackCmd -> currRendition, [] //TODO should async cmd MSGs be separated from Edit msgs?
+
+            //2. Perform doamin logic to capture any domain logic errors or transformations
             let modelConversionResult =  newRendition |> Domain.StringPrimitiveDescriptor.FromRendition 
             let errs, computedRendition =
                 match modelConversionResult with
-                | Ok _ -> [], newRendition
+                | Ok _ -> Seq.empty, newRendition
                 | Bad (errors::_) ->
-                    (PropertyError.AsDescriptionList  errors), newRendition //TODO somehow the errors need to part of the rendition???
+                    errors, newRendition 
                 | Bad ([]) ->
-                    [], newRendition
-            errs, computedRendition,  cmds
+                    Seq.empty, newRendition
+            //3. Update navigation props
+            match msg with
+                | MsgPrimitive.GoBackCmd -> 
+                    { currentEdit with EditSessionEnded = true; EditErrors = errs; ObjectBeingEdited = computedRendition},  []
+                | _ ->
+                    { currentEdit with EditErrors = errs; ObjectBeingEdited = computedRendition; IsDirty = true; LastUpdated = Some DateTime.Now},  cmds
 
     //We just happen to choose to only accept valid domain primitives
     type Msg =
@@ -70,50 +76,21 @@ module ModelUpdater =
     | PrimitiveType  of ShortName
     | MinSize  of ShortName
     | ModelEdited of StringPrimitiveDescriptor
-    //let updateFromMsg currModel msg = //keeping the rendition as state may bring more performance? Nope, you ned up building the domain model in the ViewModel
-    //        //dummy chg
-    //        let domainLogicAttempt =
-    //            trial {
-    //                let! blo = ShortName.FromRendition("blo")
-    //                let newDomainObj:StringPrimitiveDescriptor =
-    //                    match msg with
-    //                    | Size newVal ->
-    //                        { currModel with Size = newVal}
-    //                    | PrimitiveType  newVal ->
-    //                        { currModel with TypeName = newVal}
-    //                    | MinSize  newVal ->
-    //                        if newVal.Val.Length > 3 then
-    //                            { currModel with Size = blo; MinSize = newVal}
-    //                        else 
-    //                            { currModel with MinSize = newVal}
-    //                    | ModelEdited newVal ->
-    //                        if newVal.MinSize.Val.Length > 3 then
-    //                            { newVal with Size = blo }
-    //                        else 
-    //                            newVal
-    //                return newDomainObj
-    //            }
-    //        // Errors here would be only domain errors? not edit validations errors?    
-    //        match domainLogicAttempt with
-    //            | Ok (newDomainObj,_) -> [], newDomainObj,  [CmdRequestMsg.NoOp]
-    //            | Bad (errors::_) ->
-    //                (PropertyError.AsDescriptionList errors) , currModel, [] //TODO somehow the errors need to part of the rendition???
-    //            | Bad ([]) ->
-    //                [], currModel, []
 
 
-    type EntityErrors = string seq
-    type AsyncCmds = CmdRequestMsg list
-    type ReplyMessageForRendition = 
-        EntityErrors * Rendition.StringPrimitiveDescriptor 
-    type ReplyMessage = 
-        EntityErrors * StringPrimitiveDescriptor 
-    type AgentReplyMessage =
-        ReplyMessage * AsyncCmds //TODO: Maybe name them??
-    type EditMessage =
-        Msg 
-    type AgentEditMessage =
-        EditMessage * AsyncReplyChannel<AgentReplyMessage >
+
+    //type EntityErrors = string seq
+    //type AsyncCmds = CmdRequestMsg list
+    //type ReplyMessageForRendition = 
+    //    EntityErrors * Rendition.StringPrimitiveDescriptor 
+    //type ReplyMessage = 
+    //    EntityErrors * StringPrimitiveDescriptor 
+    //type AgentReplyMessage =
+    //    ReplyMessage * AsyncCmds //TODO: Maybe name them??
+    //type EditMessage =
+    //    Msg 
+    //type AgentEditMessage =
+    //    EditMessage * AsyncReplyChannel<AgentReplyMessage >
         
     
 

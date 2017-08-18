@@ -11,17 +11,19 @@ open SampleCore.DataService
     
 type PrimitivesListScreenViewModel(navService: INavigationService, dataService: IDataService)=
     let viewModel = EditableCollectionViewModel<EditableListItemViewModel<PrimitiveDescriptor>>()
+    let intialRendtion = Seq.empty
     let editFunc item =
         navService.NavigateTo (NavigationMsg.GoToPrimitiveEdit item) // TODO does navigation belong to Updater or ViewModel?
-    let refreshViewModel (errs,newRend) =
+    let readonlyInfoModel = Editable.initialView intialRendtion
+    let refreshViewModel (sessionInfo:Editable.ReadOnlyInfo<_>)  =
+        let newRend = sessionInfo.ReadOnlyObject
         printfn "Called! %A" newRend
         viewModel.Clear()
         let newItems = newRend |> Seq.map (fun i ->  (EditableListItemViewModel(i, editFunc)))
         viewModel.AddRange newItems
         printfn "Called! %d" viewModel.Items.Count
 
-    let intialRendtion = Seq.empty
-    let updater = Updater(intialRendtion, ListUpdater.updateRenditionFromMsg , refreshViewModel, ListUpdater.executeAsyncCmds dataService) 
+    let updater = UpdaterForReadonly(readonlyInfoModel, ListUpdater.updateRenditionFromMsg , refreshViewModel, ListUpdater.executeAsyncCmds dataService) 
     let msgSender = (updater.SendMsg)
     
     do msgSender Msg.LoadRecords
