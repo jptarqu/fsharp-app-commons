@@ -9,11 +9,13 @@ open SampleCore.Rendition
 open SampleCore.DataService
 
     
-type PrimitivesListScreenViewModel(navService: INavigationService, dataService: IDataService)=
+type PrimitivesListScreenViewModel(
+    navService: INavigationService, 
+    dataService: IDataService) as this =
     let viewModel = EditableCollectionViewModel<EditableListItemViewModel<PrimitiveDescriptor>>()
     let intialRendtion = Seq.empty
-    let delFunc item =
-        navService.NavigateTo (NavigationMsg.GoToPrimitiveEdit item) // TODO does navigation belong to Updater or ViewModel?
+    //let delFunc item =
+    //    navService.NavigateTo (NavigationMsg.GoToPrimitiveEdit item) // TODO does navigation belong to Updater or ViewModel?
     let editFunc item =
         navService.NavigateTo (NavigationMsg.GoToPrimitiveEdit item) // TODO does navigation belong to Updater or ViewModel?
     let readonlyInfoModel = Editable.initialView intialRendtion
@@ -21,7 +23,7 @@ type PrimitivesListScreenViewModel(navService: INavigationService, dataService: 
         let newRend = sessionInfo.ReadOnlyObject
         printfn "Called! %A" newRend
         viewModel.Clear()
-        let newItems = newRend |> Seq.map (fun i ->  (EditableListItemViewModel(i, editFunc)))
+        let newItems = newRend |> Seq.map (fun i ->  (EditableListItemViewModel(i, editFunc, this.DelFunc)))
         viewModel.AddRange newItems
         printfn "Called! %d" viewModel.Items.Count
 
@@ -31,5 +33,7 @@ type PrimitivesListScreenViewModel(navService: INavigationService, dataService: 
     do msgSender Msg.LoadRecords
     member x.ViewModel 
         with get() = viewModel 
+    member x.DelFunc(item) =
+        msgSender (Msg.Delete item)
 
 
