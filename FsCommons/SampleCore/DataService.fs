@@ -3,6 +3,7 @@
 module DataService =
     type IDataService =  
         abstract member Save: Rendition.PrimitiveDescriptor->unit
+        abstract member Delete: Rendition.PrimitiveDescriptor->unit
         abstract member GetAll: unit->Rendition.PrimitiveDescriptor seq
     type DummyDataService() =
         let mutable sampleRecords =
@@ -17,3 +18,5 @@ module DataService =
                 sampleRecords <- item :: sampleRecords 
             member x.GetAll () =
                 sampleRecords |> List.toSeq
+            member x.Delete item = 
+                sampleRecords <- sampleRecords |> List.filter (fun r -> r <> item)

@@ -16,11 +16,14 @@ module ListUpdater =
     type CmdRequestMsg =
     | Open of Rendition.PrimitiveDescriptor
     | LoadRecords
+    | DeleteRecord  of Rendition.PrimitiveDescriptor
     | NoOp
     type Msg =
     | RecordsLoaded of Rendition.PrimitiveDescriptor seq
     | LoadRecords 
     | Open  of Rendition.PrimitiveDescriptor
+    | Delete  of Rendition.PrimitiveDescriptor
+    | RecordDeleted of Rendition.PrimitiveDescriptor
     
     let executeAsyncCmds (dataService:IDataService) msgSender (cmd:CmdRequestMsg) =
         async {
@@ -31,6 +34,9 @@ module ListUpdater =
                 do! Async.Sleep(2000)
                 let items = dataService.GetAll()
                 msgSender (Msg.RecordsLoaded items)
+            | CmdRequestMsg.DeleteRecord obj ->
+                dataService.Delete(obj)
+                msgSender (Msg.RecordDeleted obj)
             | NoOp ->
                 ()
         }
@@ -45,6 +51,12 @@ module ListUpdater =
                     records,  []
                 | Msg.Open  newVal ->
                     currRendition,  []
+                | Msg.Delete  toDel ->
+                    currRendition,  [CmdRequestMsg.DeleteRecord toDel]
+                | Msg.RecordDeleted  toDel ->
+                    (currRendition |> Seq.filter (fun r -> r <> toDel)),  []
+
+                    
                  
             {currSession with ReadOnlyObject = newRendition},  cmds
             

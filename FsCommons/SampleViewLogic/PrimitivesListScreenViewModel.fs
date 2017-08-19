@@ -12,6 +12,8 @@ open SampleCore.DataService
 type PrimitivesListScreenViewModel(navService: INavigationService, dataService: IDataService)=
     let viewModel = EditableCollectionViewModel<EditableListItemViewModel<PrimitiveDescriptor>>()
     let intialRendtion = Seq.empty
+    let delFunc item =
+        navService.NavigateTo (NavigationMsg.GoToPrimitiveEdit item) // TODO does navigation belong to Updater or ViewModel?
     let editFunc item =
         navService.NavigateTo (NavigationMsg.GoToPrimitiveEdit item) // TODO does navigation belong to Updater or ViewModel?
     let readonlyInfoModel = Editable.initialView intialRendtion
