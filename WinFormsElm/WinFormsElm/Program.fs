@@ -6,11 +6,12 @@ open System
 open System.Windows.Forms
 open System.Drawing
 open WinFormsElm.Model
+open Syncfusion.Windows.Forms.Tools
 
 // based on https://gist.github.com/adicirstei/8252693570dc387b4f24
 let setup () =
 
-
+    // UI init
     let form = new Form(Width= 400, Height = 300, Visible = true, Text = "Hello World")
     form.TopMost <- true
 
@@ -32,7 +33,17 @@ let setup () =
     panel.Controls.Add(incBtn)
     panel.Controls.Add(label)
     panel.Controls.Add(decBtn)
-    
+
+    let syncLicense = "="
+    Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(syncLicense);
+                
+    let buttonAdv1 = new Syncfusion.Windows.Forms.ButtonAdv()
+    //buttonAdv1.
+    buttonAdv1.Text <- "My Button"
+    buttonAdv1.ButtonType <- Syncfusion.Windows.Forms.Tools.ButtonTypes.Calculator
+    panel.Controls.Add(buttonAdv1)
+
+    // Elm setup
     let model = 0
 
     let view model =
@@ -40,7 +51,7 @@ let setup () =
 
 
 
-
+      // event wiring
     let increment = Control.Observable.map (fun _ -> Increment) incBtn.Click
     let decrement = Control.Observable.map (fun _ -> Decrement) decBtn.Click
 
